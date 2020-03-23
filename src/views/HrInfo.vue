@@ -176,11 +176,11 @@
                         this.ruleForm.hrid = this.hr.id;
                         this.putRequest("/hr/pass", this.ruleForm).then(resp => {
                             if (resp) {
-                                this.getRequest("/logout");
+                                this.getRequest("/user/logout");
                                 // 从session移除用户信息
                                 window.sessionStorage.removeItem("user")
                                 // 从本地移除token
-                        window.localStorage.removeItem('token');
+                                window.localStorage.removeItem('token');
                                 this.$store.commit('initRoutes', []);
                                 this.$router.replace("/");
                             }

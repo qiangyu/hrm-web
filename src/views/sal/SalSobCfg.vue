@@ -1,11 +1,11 @@
 <template>
     <div>
-        <Pos></Pos>
+        <PosAdd></PosAdd>
     </div>
 </template>
 
 <script>
-    import Pos from '../../components/sys/basic/Pos'
+    import Pos from '../../components/sys/basic/PosAdd'
     export default {
         name: "SalSobCfg",
         data() {
@@ -19,7 +19,7 @@
             }
         },
         components: {
-            Pos
+            PosAdd
         }, 
         mounted() {
             this.initEmps();

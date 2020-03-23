@@ -2,11 +2,9 @@
     <div>
         <div>
             <div style="display: flex;justify-content: space-between">
-                <div>
-                    <el-button type="primary" icon="el-icon-plus" @click="showAddEmpView">
-                        添加用户
-                    </el-button>
-                </div>
+                <el-button type="primary" icon="el-icon-plus" @click="showAddEmpView">
+                    添加用户
+                </el-button>
             </div>
         </div>
         <el-dialog

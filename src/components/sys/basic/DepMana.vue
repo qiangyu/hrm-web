@@ -13,25 +13,27 @@
                 :filter-node-method="filterNode"
                 ref="tree">
             <span class="custom-tree-node" style="display: flex;justify-content: space-between;width: 100%;"
-                  slot-scope="{ node, data }">
-        <span>{{data.name }}</span>
-        <span>
-          <el-button
-                  type="primary"
-                  size="mini"
-                  class="depBtn"
-                  @click="() => showAddDepView(data)">
-            添加部门
-          </el-button>
-          <el-button
-                  type="danger"
-                  size="mini"
-                  class="depBtn"
-                  @click="() => deleteDep(data)">
-            删除部门
-          </el-button>
-        </span>
-      </span>
+                  slot-scope="{ node, data }" :title="data.remark">
+                <span style="font-size: 20px;">{{data.name }}</span>
+                <span>
+                    <el-button
+                            type="primary"
+                            size="mini"
+                            class="depBtn"
+                            @click="() => addDep(data)"
+                            v-if="power">
+                        添加部门
+                    </el-button>
+                    <el-button
+                            type="danger"
+                            size="mini"
+                            class="depBtn"
+                            @click="() => deleteDep(data)"
+                            v-if="power">
+                        删除部门
+                    </el-button>
+                </span>
+            </span>
         </el-tree>
         <el-dialog
                 title="添加部门"
@@ -53,12 +55,21 @@
                             <el-input v-model="dep.name" placeholder="请输入部门名称..."></el-input>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <el-tag>部门描述</el-tag>
+                        </td>
+                        <td>
+                            <el-input v-model="dep.remark" placeholder="请输入部门描述..."></el-input>
+                        </td>
+                    </tr>
                 </table>
+                <p v-if="isNull">请输入部门名称及描述！</p>
             </div>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="doAddDep">确 定</el-button>
-  </span>
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="doAddDep">确 定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -72,14 +83,17 @@
                 filterText: '',
                 dep: {
                     name: '',
-                    parentId: -1
+                    parentId: -1, 
+                    remark: ''
                 },
                 pname: '',
                 deps: [],
                 defaultProps: {
                     children: 'children',
                     label: 'name'
-                }
+                }, 
+                isNull: false, 
+                power: JSON.parse(window.sessionStorage.getItem("user")).status == 1 ? false : true
             }
         },
         watch: {
@@ -113,13 +127,28 @@
                 }
             },
             doAddDep() {
-                this.postRequest("/system/basic/department/", this.dep).then(resp => {
-                    if (resp) {
+                if (this.dep.name == '' || this.dep.remark == '') {
+                    return this.isNull = true;
+                }
+                this.isNull = false;
+                this.postRequest("/department/basic/", this.dep).then(resp => {
+                    if (resp.status === 20000402) {
+                        // window.sessionStorage.removeItem('user'); 
+                        // window.localStorage.removeItem('token');
+                        // 用户没登录，跳转至登录页面
+                        this.$router.replace('/');
+                    } else if (resp.status = 200) {
                         this.addDep2Deps(this.deps, resp.obj);
                         this.dialogVisible = false;
                         //初始化变量
                         this.initDep();
                     }
+                    // if (resp) {
+                    //     this.addDep2Deps(this.deps, resp.obj);
+                    //     this.dialogVisible = false;
+                    //     //初始化变量
+                    //     this.initDep();
+                    // }
                 })
             },
             removeDepFromDeps(p,deps, id) {
@@ -145,10 +174,18 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                       this.deleteRequest("/system/basic/department/"+data.id).then(resp=>{
-                           if (resp) {
-                               this.removeDepFromDeps(null,this.deps,data.id);
-                           }
+                       this.deleteRequest("/department/basic/"+data.id).then(resp=>{
+                           if (resp.status === 20000402) {
+                                // window.sessionStorage.removeItem('user'); 
+                                // window.localStorage.removeItem('token');
+                                // 用户没登录，跳转至登录页面
+                                this.$router.replace('/');
+                            } else if (resp.status === 200) {
+                                this.removeDepFromDeps(null,this.deps,data.id);
+                            }
+                        //    if (resp) {
+                        //        this.removeDepFromDeps(null,this.deps,data.id);
+                        //    }
                        })
                     }).catch(() => {
                         this.$message({
@@ -158,16 +195,25 @@
                     });
                 }
             },
-            showAddDepView(data) {
+            addDep(data) {
                 this.pname = data.name;
                 this.dep.parentId = data.id;
+                this.dep
                 this.dialogVisible = true;
             },
             initDeps() {
-                this.getRequest("/system/basic/department/").then(resp => {
-                    if (resp) {
-                        this.deps = resp;
+                this.getRequest("/department/basic/").then(resp => {
+                    if (resp.status === 20000402) {
+                        // window.sessionStorage.removeItem('user'); 
+                        // window.localStorage.removeItem('token');
+                        // 用户没登录，跳转至登录页面
+                        this.$router.replace('/');
+                    } else if (resp.status === 200) {
+                        this.deps = resp.obj;
                     }
+                    // if (resp) {
+                    //     this.deps = resp.obj;
+                    // }
                 })
             },
             filterNode(value, data) {

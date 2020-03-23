@@ -73,9 +73,9 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        let token = window.localStorage.getItem('token');
-                        let url = '/user/logout?token=' + token;
-                        this.getRequest(url);
+                        // let token = window.localStorage.getItem('token');
+                        // let url = '/user/logout?token=' + token;
+                        this.getRequest('/user/logout');
                         // 从session移除用户信息
                         // window.sessionStorage.removeItem("user")
                         // 从本地移除token

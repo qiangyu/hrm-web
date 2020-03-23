@@ -187,8 +187,8 @@
                         <el-col :span="8">
                             <el-form-item label="用户状态:" prop="status">
                                 <el-radio-group v-model="newUser.status">
-                                    <el-radio label="1">普通用户</el-radio>
-                                    <el-radio label="2">超级管理员</el-radio>
+                                    <el-radio :label="1">普通用户</el-radio>
+                                    <el-radio :label="2">超级管理员</el-radio>
                                 </el-radio-group>
                             </el-form-item>
                             <!-- <p>如果没有选择权限，则默认普通用户！</p> -->
@@ -365,6 +365,7 @@
                 this.newUser.checkPassword = data.password;
                 this.newUser.createdate = data.createdate;
                 this.newUser.status = data.status;
+                // alert(JSON.stringify(this.newUser));
 
                 this.dialogVisible = true;
             },

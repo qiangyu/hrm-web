@@ -24,23 +24,21 @@ Vue.config.productionTip = false
 Vue.use(ElementUI,{size:'small'});
 
 router.beforeEach((to, from, next) => {
-    if (to.path == '/' || to.path == 'index.html') {
+    if (to.path === '/' || to.path === 'index.html') {
         // alert(window.sessionStorage.getItem('user'));
         // 访问首页先注销
-        let token = window.localStorage.getItem('token');
-        let url = '/user/logout?token=' + token;
-        getRequest(url);
-        // 从session移除用户信息
-        // window.sessionStorage.removeItem("user")
-        // 从本地移除token
-        // window.localStorage.removeItem('token');
+        // let token = window.localStorage.getItem('token');
+        // let url = '/user/logout?token=' + token;
+        if (window.localStorage.getItem('token') && window.sessionStorage.getItem('user')) {
+            getRequest('/user/logout');
+        }
         store.commit('initRoutes', []);
         // 接着删除本地的token以及session的用户信息
         window.localStorage.removeItem('token');
         window.sessionStorage.removeItem('user');
         next();
     }else {
-        if (window.localStorage.getItem('token')) {
+        if (window.localStorage.getItem('token') && window.sessionStorage.getItem('user')) {
             initMenu(router, store);
             next();
         }else{
