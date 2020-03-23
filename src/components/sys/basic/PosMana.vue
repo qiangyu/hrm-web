@@ -1,19 +1,14 @@
 <template>
     <div>
         <div>
-            <el-input
-                    size="small"
-                    class="addPosInput"
-                    v-loading="loading"
-                    element-loading-text="正在加载..."
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.8)"
-                    placeholder="添加职位..."
-                    prefix-icon="el-icon-plus"
-                    @keydown.enter.native="addPosition"
-                    v-model="pos.name">
-            </el-input>
-            <el-button icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
+            <el-input placeholder="请输入职位名称进行模糊搜索，可以直接回车搜索..." prefix-icon="el-icon-search"
+                        clearable
+                        @clear="initPositions"
+                        style="width: 380px;margin-right: 10px" v-model="keyword"
+                        @keydown.enter.native="initPositions"></el-input>
+            <el-button icon="el-icon-search" type="primary" @click="initPositions">
+                搜索
+            </el-button>
         </div>
         <div class="posManaMain">
             <el-table
@@ -38,8 +33,13 @@
                         width="180">
                 </el-table-column>
                 <el-table-column
+                        prop="remark"
+                        label="职位描述"
+                        width="180">
+                </el-table-column>
+                <el-table-column
                         prop="createDate"
-                        width="150"
+                        width="250"
                         label="创建时间">
                 </el-table-column>
                 <el-table-column
@@ -77,6 +77,10 @@
                     <el-input class="updatePosInput" size="small" v-model="updatePos.name"></el-input>
                 </div>
                 <div>
+                    <el-tag>职位描述</el-tag>
+                    <el-input class="updatePosInput" size="small" v-model="updatePos.remark"></el-input>
+                </div>
+                <div>
                     <el-tag>是否启用</el-tag>
                     <el-switch
                             v-model="updatePos.enabled"
@@ -98,6 +102,9 @@
         name: "PosMana",
         data() {
             return {
+                searchValue: {
+                    name: null
+                },
                 pos: {
                     name: ''
                 },
@@ -105,10 +112,13 @@
                 loading: false,
                 updatePos: {
                     name: '',
+                    remark: '', 
                     enabled: false
                 },
                 multipleSelection: [],
-                positions: []
+                positions: [], 
+                // 搜索信息
+                keyword: '', 
             }
         },
         mounted() {
@@ -121,12 +131,16 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let ids = '?';
-                    this.multipleSelection.forEach(item => {
-                        ids += 'ids=' + item.id + '&';
+                    // let ids = '?';
+                    let ids = []; 
+                    this.multipleSelection.forEach((item, index) => {
+                        ids[index] = item.id;
                     })
-                    this.deleteRequest("/system/basic/pos/" + ids).then(resp => {
-                        if (resp) {
+                    this.deleteRequest("/pos/basic/", ids).then(resp => {
+                        if (resp.status === 20000402) {
+                            // 用户没登录，跳转至登录页面
+                            this.$router.replace('/');
+                        } else if (resp.status === 200) {
                             this.initPositions();
                         }
                     })
@@ -140,27 +154,22 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-            addPosition() {
-                if (this.pos.name) {
-                    this.postRequest("/system/basic/pos/", this.pos).then(resp => {
-                        if (resp) {
-                            this.initPositions();
-                            this.pos.name = '';
-                        }
-                    })
-                } else {
-                    this.$message.error('职位名称不可以为空');
-                }
-            },
             showEditView(index, data) {
                 Object.assign(this.updatePos, data);
                 this.dialogVisible = true;
             },
             doUpdate() {
-                this.putRequest("/system/basic/pos/", this.updatePos).then(resp => {
-                    if (resp) {
+                if (this.updatePos.name == '' || this.updatePos.remark == '') {
+                    return this.$message.error('职位名称以及描述不可以为空！');
+                }
+                this.putRequest("/pos/basic/", this.updatePos).then(resp => {
+                    if (resp.status === 20000402) {
+                        // 用户没登录，跳转至登录页面
+                        this.$router.replace('/');
+                    } else if (resp.status === 200) {
                         this.initPositions();
                         this.updatePos.name = '';
+                        this.updatePos.remark = '';
                         this.dialogVisible = false;
                     }
                 })
@@ -171,8 +180,11 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.deleteRequest("/system/basic/pos/" + data.id).then(resp => {
-                        if (resp) {
+                    this.deleteRequest("/pos/basic/" + data.id).then(resp => {
+                        if (resp.status === 20000402) {
+                            // 用户没登录，跳转至登录页面
+                            this.$router.replace('/');
+                        } else if (resp.status === 200) {
                             this.initPositions();
                         }
                     })
@@ -183,14 +195,28 @@
                     });
                 });
             },
-            initPositions() {
+            initPositions(type) {
                 this.loading = true;
-                this.getRequest("/system/basic/pos/").then(resp => {
-                    this.loading = false;
-                    if (resp) {
-                        this.positions = resp;
+                let url = '/pos/basic/';
+                if (type && type == 'advanced') {
+                    if (this.searchValue.name) {
+                         url += '?name=' + this.searchValue.name;
                     }
-                })
+                } else {
+                    url += "?name=" + this.keyword;
+                }
+                this.getRequest(url).then(resp => {
+                    this.loading = false;
+                    if (resp.status === 20000402) {
+                        // 用户没登录，跳转至登录页面
+                        this.$router.replace('/');
+                    } else if (resp.status === 200) {
+                        this.positions = resp.obj;
+                    } else if (resp.status != 200) {
+                        this.users = null;
+                        this.total = 0;
+                    }
+                });
             }
         }
     }

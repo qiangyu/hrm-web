@@ -64,7 +64,6 @@
                         </td>
                     </tr>
                 </table>
-                <p v-if="isNull">请输入部门名称及描述！</p>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -92,7 +91,6 @@
                     children: 'children',
                     label: 'name'
                 }, 
-                isNull: false, 
                 power: JSON.parse(window.sessionStorage.getItem("user")).status == 1 ? false : true
             }
         },
@@ -126,29 +124,21 @@
                     }
                 }
             },
+            // 添加
             doAddDep() {
                 if (this.dep.name == '' || this.dep.remark == '') {
-                    return this.isNull = true;
+                    return this.$message.error('请输入部门名称及描述！');
                 }
-                this.isNull = false;
                 this.postRequest("/department/basic/", this.dep).then(resp => {
                     if (resp.status === 20000402) {
-                        // window.sessionStorage.removeItem('user'); 
-                        // window.localStorage.removeItem('token');
                         // 用户没登录，跳转至登录页面
                         this.$router.replace('/');
-                    } else if (resp.status = 200) {
+                    } else if (resp.status === 200) {
                         this.addDep2Deps(this.deps, resp.obj);
                         this.dialogVisible = false;
                         //初始化变量
                         this.initDep();
                     }
-                    // if (resp) {
-                    //     this.addDep2Deps(this.deps, resp.obj);
-                    //     this.dialogVisible = false;
-                    //     //初始化变量
-                    //     this.initDep();
-                    // }
                 })
             },
             removeDepFromDeps(p,deps, id) {
@@ -176,16 +166,11 @@
                     }).then(() => {
                        this.deleteRequest("/department/basic/"+data.id).then(resp=>{
                            if (resp.status === 20000402) {
-                                // window.sessionStorage.removeItem('user'); 
-                                // window.localStorage.removeItem('token');
                                 // 用户没登录，跳转至登录页面
                                 this.$router.replace('/');
                             } else if (resp.status === 200) {
                                 this.removeDepFromDeps(null,this.deps,data.id);
                             }
-                        //    if (resp) {
-                        //        this.removeDepFromDeps(null,this.deps,data.id);
-                        //    }
                        })
                     }).catch(() => {
                         this.$message({
@@ -204,16 +189,11 @@
             initDeps() {
                 this.getRequest("/department/basic/").then(resp => {
                     if (resp.status === 20000402) {
-                        // window.sessionStorage.removeItem('user'); 
-                        // window.localStorage.removeItem('token');
                         // 用户没登录，跳转至登录页面
                         this.$router.replace('/');
                     } else if (resp.status === 200) {
                         this.deps = resp.obj;
                     }
-                    // if (resp) {
-                    //     this.deps = resp.obj;
-                    // }
                 })
             },
             filterNode(value, data) {
