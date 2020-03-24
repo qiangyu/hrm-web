@@ -136,7 +136,7 @@
                     this.multipleSelection.forEach((item, index) => {
                         ids[index] = item.id;
                     })
-                    this.deleteRequest("/pos/basic/", ids).then(resp => {
+                    this.deleteRequest("/position/basic/", ids).then(resp => {
                         if (resp.status === 20000402) {
                             // 用户没登录，跳转至登录页面
                             this.$router.replace('/');
@@ -162,7 +162,7 @@
                 if (this.updatePos.name == '' || this.updatePos.remark == '') {
                     return this.$message.error('职位名称以及描述不可以为空！');
                 }
-                this.putRequest("/pos/basic/", this.updatePos).then(resp => {
+                this.putRequest("/position/basic/", this.updatePos).then(resp => {
                     if (resp.status === 20000402) {
                         // 用户没登录，跳转至登录页面
                         this.$router.replace('/');
@@ -180,7 +180,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.deleteRequest("/pos/basic/" + data.id).then(resp => {
+                    this.deleteRequest("/position/basic/" + data.id).then(resp => {
                         if (resp.status === 20000402) {
                             // 用户没登录，跳转至登录页面
                             this.$router.replace('/');
@@ -197,7 +197,7 @@
             },
             initPositions(type) {
                 this.loading = true;
-                let url = '/pos/basic/';
+                let url = '/position/basic/';
                 if (type && type == 'advanced') {
                     if (this.searchValue.name) {
                          url += '?name=' + this.searchValue.name;

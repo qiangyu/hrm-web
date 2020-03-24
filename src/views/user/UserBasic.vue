@@ -3,15 +3,15 @@
         <div>
             <div style="display: flex;justify-content: space-between">
                 <div>
-                    <el-input placeholder="请输入用户名或状态进行搜索，可以直接回车搜索..." prefix-icon="el-icon-search"
+                    <el-input placeholder="请输入用户名进行搜索，可以直接回车搜索..." prefix-icon="el-icon-search"
                               clearable
                               @clear="initUsers"
-                              style="width: 380px;margin-right: 10px" v-model="keyword"
+                              style="width: 380px;margin-right: 10px" v-model="searchValue.username"
                               @keydown.enter.native="initUsers" :disabled="showAdvanceSearchView"></el-input>
                     <el-button icon="el-icon-search" type="primary" @click="initUsers" :disabled="showAdvanceSearchView">
                         搜索
                     </el-button>
-                    <el-button type="primary" @click="showAdvanceSearchView = !showAdvanceSearchView">
+                    <el-button type="primary" @click="cleanSearchValues()">
                         <i :class="showAdvanceSearchView?'fa fa-angle-double-up':'fa fa-angle-double-down'"
                            aria-hidden="true"></i>
                         高级搜索
@@ -43,15 +43,15 @@
                      style="border: 1px solid #409eff;border-radius: 5px;box-sizing: border-box;padding: 5px;margin: 10px 0px;">
                     <el-row>
                         <el-col :span="5" style="margin: 10px">
-                            用户名:
-                            <el-select v-model="searchValue.username" placeholder="用户名" size="mini"
+                            用户账号:
+                            <el-select v-model="searchValue.loginname" placeholder="用户账号" size="mini"
                                        style="width: 250px;">
-                                &ensp;查找：<el-input v-model="searchValue.username" placeholder="输入需查找用户名" size="mini" style="width: 180px" />
+                                &ensp;查找：<el-input v-model="searchValue.loginname" placeholder="输入需查找用户账号" size="mini" style="width: 180px" />
                                 <el-option
                                         v-for = "user in users"
                                         :key = "user.id"
-                                        :label = "user.username"
-                                        :value = "user.username">
+                                        :label = "user.loginname"
+                                        :value = "user.loginname">
                                 </el-option>
                             </el-select>
                         </el-col>
@@ -69,11 +69,11 @@
                         </el-col>
                         
                         <el-col :span="5" :offset="1" style="margin: 10px">
-                            <!-- <el-button size="mini"@click="showAdvanceSearchView = showAdvanceSearchView">
-                                <i :class="!showAdvanceSearchView?'fa fa-angle-double-up':'fa fa-angle-double-down'"
-                                    aria-hidden="true"></i>
+                            <el-button type="primary" @click="cleanSearchValues()">
+                                <i :class="showAdvanceSearchView?'fa fa-angle-double-up':'fa fa-angle-double-down'"
+                                aria-hidden="true"></i>
                                 取消
-                            </el-button> -->
+                            </el-button>
                             <el-button size="mini" icon="el-icon-search" type="primary" @click="initUsers('advanced')">搜索</el-button>
                         </el-col>
                     </el-row>
@@ -236,6 +236,7 @@
             return {
                 searchValue: {
                     username: null, 
+                    loginname: null, 
                     status: null
                 },
                 title: '',
@@ -311,6 +312,13 @@
             this.initUsers();
         },
         methods: {
+            // 清除搜索的信息
+            cleanSearchValues() {
+                this.searchValue.username = null;
+                this.searchValue.loginname = null;
+                this.searchValue.status = null;
+                this.showAdvanceSearchView = !this.showAdvanceSearchView;
+            }, 
             // 添加用户是重置输入框
              resetForm(formName) {
                 this.emptyUser();
@@ -465,13 +473,13 @@
                 let url = '/user/basic/?page=' + this.page + '&size=' + this.size;
                 if (type && type == 'advanced') {
                     if (this.searchValue.username) {
-                         url += '&username=' + this.searchValue.username;
+                         url += '&loginname=' + this.searchValue.loginname;
                     }
                     if (this.searchValue.status) {
                          url += '&status=' + this.searchValue.status;
                     }
                 } else {
-                    url += "&username=" + this.keyword;
+                    url += "&username=" + this.searchValue.username;
                 }
                 this.getRequest(url).then(resp => {
                     this.loading = false;

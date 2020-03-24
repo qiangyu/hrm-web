@@ -36,6 +36,12 @@ router.beforeEach((to, from, next) => {
         // 接着删除本地的token以及session的用户信息
         window.localStorage.removeItem('token');
         window.sessionStorage.removeItem('user');
+        // 移除民族
+        window.sessionStorage.removeItem('nations');
+        // 移除部门
+        window.sessionStorage.removeItem('deps');
+        // 移除政治面貌
+        window.sessionStorage.removeItem('politicsstatus');
         next();
     }else {
         if (window.localStorage.getItem('token') && window.sessionStorage.getItem('user')) {
