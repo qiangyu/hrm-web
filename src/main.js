@@ -40,6 +40,8 @@ router.beforeEach((to, from, next) => {
         window.sessionStorage.removeItem('nations');
         // 移除部门
         window.sessionStorage.removeItem('deps');
+        // 移除职位
+        window.sessionStorage.removeItem('positions');
         // 移除政治面貌
         window.sessionStorage.removeItem('politicsstatus');
         next();

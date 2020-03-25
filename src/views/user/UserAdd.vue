@@ -1,11 +1,12 @@
 <template>
     <div>
         <div>
-            <div style="display: flex;justify-content: space-between">
+            <div style="display: flex;justify-content: space-between" v-if="power">
                 <el-button type="primary" icon="el-icon-plus" @click="showAddEmpView">
                     添加用户
                 </el-button>
             </div>
+            <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p>
         </div>
         <el-dialog
                 :title="title"
@@ -93,6 +94,8 @@
                 importDataBtnIcon: 'el-icon-upload2',
                 importDataDisabled: false,
                 showAdvanceSearchView: false,
+                // 权限
+                power: JSON.parse(window.sessionStorage.getItem("user")).status == 1 ? false : true, 
                 // 保存查询除用户的信息
                 users: [],
                 loading: false,

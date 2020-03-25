@@ -53,13 +53,16 @@
                     <template slot-scope="scope">
                         <el-button
                                 size="mini"
-                                @click="showEditView(scope.$index, scope.row)">编辑
+                                @click="showEditView(scope.$index, scope.row)"
+                                 v-if="power">编辑
                         </el-button>
                         <el-button
                                 size="mini"
                                 type="danger"
-                                @click="handleDelete(scope.$index, scope.row)">删除
+                                @click="handleDelete(scope.$index, scope.row)"
+                                 v-if="power">删除
                         </el-button>
+                        <p v-if="!power">权限不足，无法操作</p>
                     </template>
                 </el-table-column>
             </el-table>
@@ -110,11 +113,14 @@
                 },
                 dialogVisible: false,
                 loading: false,
+                // 权限
+                power: JSON.parse(window.sessionStorage.getItem("user")).status == 1 ? false : true, 
                 updatePos: {
                     name: '',
                     remark: '', 
                     enabled: false
                 },
+                // 批量删除
                 multipleSelection: [],
                 positions: [], 
                 // 搜索信息

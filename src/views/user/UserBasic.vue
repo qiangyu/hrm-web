@@ -139,7 +139,7 @@
                         <el-button v-if="power" @click="showEditEmpView(scope.row)" style="padding: 3px; margin-right: 15px" size="medium">编辑</el-button>
                         <!-- <el-button style="padding: 3px" size="mini" type="primary">查看高级资料</el-button> -->
                         <el-button v-if="power" @click="deleteEmp(scope.row)" style="padding: 3px" size="medium" type="danger">删除</el-button>
-                        <p v-if="!power">权限不足，无法操作</p>
+                        <p v-if="!power" style="color: red;">权限不足，无法操作</p>
                     </template>
                 </el-table-column>
             </el-table>
@@ -235,8 +235,8 @@
             };
             return {
                 searchValue: {
-                    username: null, 
-                    loginname: null, 
+                    username: '', 
+                    loginname: '', 
                     status: null
                 },
                 title: '',
@@ -268,6 +268,7 @@
                     createdate: '', 
                     status: 1
                 },
+                // 权限
                 power: JSON.parse(window.sessionStorage.getItem("user")).status == 1 ? false : true, 
                 userStatus: [
                     "", 
