@@ -38,7 +38,7 @@
                     :data="documentData"
                     ref="upload"
                     :headers="myHeader"
-                    limit: 1>
+                    limit=1>
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                     <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -49,7 +49,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer" style="margin-left: 25%;">
                     <el-button @click="cancel">取 消</el-button>
-                    <el-button @click="resetForm('documentContent')" v-if="!isEditUser">重置</el-button>
+                    <el-button @click="resetForm('documentContent')">重置</el-button>
                     <el-button type="primary" @click="doAddDocument">确 定</el-button>
                 </span>
     </div>

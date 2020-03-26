@@ -426,9 +426,8 @@
                     this.$refs['newUser'].validate(valid => {
                         if (valid) {
                             let that = this;
-                            
                             this.postRequest("/user/basic/", that.newUser).then(resp => {
-                                alert(JSON.stringify(this.newUser));
+                                // alert(JSON.stringify(this.newUser));
                                 if (resp.status === 20000402) {
                                     // window.sessionStorage.removeItem('user');
                                     // window.localStorage.removeItem('token');

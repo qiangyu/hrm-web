@@ -6,12 +6,12 @@
                 <div>
                     <el-button icon="el-icon-bell" type="text" style="margin-right: 8px;color: #000000;" size="normal" @click="goChat"></el-button>
                     <el-dropdown class="userInfo" @command="commandHandler">
-  <span class="el-dropdown-link">
-    {{user.name}}<i><img :src="user.userface" alt=""></i>
-  </span>
+                        <span class="el-dropdown-link">
+                            {{user.loginname}}<i><img src="http://bpic.588ku.com/element_pic/01/40/00/64573ce2edc0728.jpg" alt=""></i>
+                        </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>
-                            <el-dropdown-item command="setting">设置</el-dropdown-item>
+                            <!-- <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>
+                            <el-dropdown-item command="setting">设置</el-dropdown-item> -->
                             <el-dropdown-item command="logout" divided>注销登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -37,7 +37,7 @@
                         <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
                     </el-breadcrumb>
                     <div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
-                        欢迎来到微人事！
+                        欢迎来到人力资源管理系统！xiaoyu...
                     </div>
                     <router-view class="homeRouterView"/>
                 </el-main>
@@ -59,7 +59,8 @@
                 return this.$store.state.routes;
             },
             user() {
-                return this.$store.state.currentHr;
+                // return this.$store.state.currentHr;
+                return JSON.parse(window.sessionStorage.getItem("user"));
             }
         },
         methods: {

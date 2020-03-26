@@ -604,7 +604,6 @@
                     this.multipleSelection.forEach((item, index) => {
                         ids[index] = item.id;
                     })
-                    alert(ids);
                     this.deleteRequest("/employee/basic/", ids).then(resp => {
                         if (resp.status === 20000402) {
                             // 用户没登录，跳转至登录页面

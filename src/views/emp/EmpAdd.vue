@@ -388,7 +388,7 @@
                 // 编辑
                 if (this.emp.id) {
                     this.$refs['empForm'].validate(valid => {
-                        alert(JSON.stringify(this.emp));
+                        // alert(JSON.stringify(this.emp));
                         if (valid) {
                             this.putRequest("/employee/basic/", this.emp).then(resp => {
                                 if (resp.status === 20000402) {
@@ -409,7 +409,7 @@
                 } else {
                     this.$refs['empForm'].validate(valid => {
                         if (valid) {
-                            alert(JSON.stringify(this.emp));
+                            // alert(JSON.stringify(this.emp));
                             this.postRequest("/employee/basic/", this.emp).then(resp => {
                                 if (resp.status === 20000402) {
                                     // window.sessionStorage.removeItem('user');
