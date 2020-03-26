@@ -18,7 +18,7 @@
                     </el-button>
                 </div>
                 <div>
-                    <el-upload
+                    <!-- <el-upload
                             :show-file-list="false"
                             :before-upload="beforeUpload"
                             :on-success="onSuccess"
@@ -32,7 +32,7 @@
                     </el-upload>
                     <el-button type="success" @click="exportData" icon="el-icon-download">
                         导出数据
-                    </el-button>
+                    </el-button> -->
                     <el-button v-if="power" type="primary" icon="el-icon-plus" @click="showAddEmpView">
                         添加用户
                     </el-button>
@@ -886,7 +886,7 @@
                         this.$router.replace('/');
                     } else if (resp.status === 200) {
                         this.emps = resp.obj.data;
-                        this.total = resp.total;
+                        this.total = resp.obj.total;
                     } else if (resp.status != 200) {
                         this.emps = null;
                         this.total = 0;

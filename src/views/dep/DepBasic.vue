@@ -8,10 +8,6 @@
 
 <script>
     import DepMana from '../../components/sys/basic/DepMana'
-    // import PosMana from '../../components/sys/basic/PosMana'
-    // import JobLevelMana from '../../components/sys/basic/JobLevelMana'
-    // import EcMana from '../../components/sys/basic/EcMana'
-    // import PermissMana from '../../components/sys/basic/PermissMana'
     export default {
         name: "DepBasic", 
         data(){
@@ -20,11 +16,7 @@
             }
         },
         components:{
-            DepMana,
-            // PosMana,
-            // JobLevelMana,
-            // EcMana,
-            // PermissMana
+            DepMana
         }
     }
 </script>

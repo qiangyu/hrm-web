@@ -18,7 +18,7 @@
                     </el-button>
                 </div>
                 <div>
-                    <el-upload
+                    <!-- <el-upload
                             :show-file-list="false"
                             :before-upload="beforeUpload"
                             :on-success="onSuccess"
@@ -32,7 +32,7 @@
                     </el-upload>
                     <el-button type="success" @click="exportData" icon="el-icon-download">
                         导出数据
-                    </el-button>
+                    </el-button> -->
                     <el-button type="primary" icon="el-icon-plus" @click="showAddEmpView" v-if="power">
                         添加用户
                     </el-button>
@@ -244,7 +244,7 @@
                 importDataBtnIcon: 'el-icon-upload2',
                 importDataDisabled: false,
                 showAdvanceSearchView: false,
-                // 保存查询除用户的信息
+                // 保存查询出用户的信息
                 users: [],
                 loading: false,
                 popVisible: false,
@@ -269,7 +269,7 @@
                     status: 1
                 },
                 // 权限
-                power: JSON.parse(window.sessionStorage.getItem("user")).status == 1 ? false : true, 
+                power: JSON.parse(window.sessionStorage.getItem("user")).status === 1 ? false : true, 
                 userStatus: [
                     "", 
                     "1", 
