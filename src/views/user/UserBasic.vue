@@ -42,7 +42,7 @@
                 <div v-show="showAdvanceSearchView"
                      style="border: 1px solid #409eff;border-radius: 5px;box-sizing: border-box;padding: 5px;margin: 10px 0px;">
                     <el-row>
-                        <el-col :span="5" style="margin: 10px">
+                        <!-- <el-col :span="5" style="margin: 10px">
                             用户账号:
                             <el-select v-model="searchValue.loginname" placeholder="用户账号" size="mini"
                                        style="width: 250px;">
@@ -54,8 +54,8 @@
                                         :value = "user.loginname">
                                 </el-option>
                             </el-select>
-                        </el-col>
-                        <el-col :span="3" style="margin: 10px">
+                        </el-col> -->
+                        <el-col :span="4" style="margin: 10px">
                             用户状态:
                             <el-select v-model="searchValue.status" placeholder="用户状态" size="mini"
                                        style="width: 130px;">
@@ -105,29 +105,29 @@
                         prop="username"
                         align="left"
                         label="用户名"
-                        width="90">
+                        width="100">
                 </el-table-column>
                 <el-table-column
                         prop="loginname"
                         label="账号"
                         align="left"
-                        width="85">
+                        width="100">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                         prop="password"
                         label="密码"
                         align="left"
                         width="85">
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
-                        prop="status"
-                        label="status"
+                        prop="textStatus"
+                        label="用户权限"
                         align="left"
-                        width="95">
+                        width="100">
                 </el-table-column>
                 <el-table-column
                         prop="createdate"
-                        width="250"
+                        width="100"
                         align="left"
                         label="创建时间">
                 </el-table-column>
@@ -136,10 +136,10 @@
                         label="操作"
                         width="145">
                     <template slot-scope="scope">
-                        <el-button v-if="power" @click="showEditEmpView(scope.row)" style="padding: 3px; margin-right: 15px" size="medium">编辑</el-button>
+                        <el-button v-if="loginUserId === scope.row.id || (power != 1 && scope.row.status != 3 && !(power === 2 && scope.row.status === 2))" @click="showEditEmpView(scope.row)" style="padding: 3px; margin-left: 15px; margin-right: 15px" size="medium">编辑</el-button>
                         <!-- <el-button style="padding: 3px" size="mini" type="primary">查看高级资料</el-button> -->
-                        <el-button v-if="power" @click="deleteEmp(scope.row)" style="padding: 3px" size="medium" type="danger">删除</el-button>
-                        <p v-if="!power" style="color: red;">权限不足，无法操作</p>
+                        <el-button v-if="loginUserId === scope.row.id || (power != 1 && scope.row.status != 3 && !(power === 2 && scope.row.status === 2))" style="padding: 3px" size="medium" type="danger">删除</el-button>
+                        <p v-if="loginUserId != scope.row.id && (power === 1 || scope.row.status === 3 || (power === 2 && scope.row.status === 2))" style="color: red;">权限不足，无法操作</p>
                     </template>
                 </el-table-column>
             </el-table>
@@ -173,7 +173,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="4">
-                            <el-form-item label="密码:" prop="password">
+                            <el-form-item :label="updateOrAddPassword" prop="password">
                                 <el-input type="password" size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.password"
                                           placeholder="请输入密码"></el-input>
                             </el-form-item>
@@ -185,7 +185,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="用户状态:" prop="status">
+                            <el-form-item label="用户权限:" prop="status">
                                 <el-radio-group v-model="newUser.status">
                                     <el-radio :label="1">普通用户</el-radio>
                                     <el-radio :label="2">超级管理员</el-radio>
@@ -239,7 +239,10 @@
                     loginname: '', 
                     status: null
                 },
+                // 添加或修改弹窗的标题
                 title: '',
+                // 添加或修改弹窗的密码输入框
+                updateOrAddPassword: '密码', 
                 importDataBtnText: '导入数据',
                 importDataBtnIcon: 'el-icon-upload2',
                 importDataDisabled: false,
@@ -269,7 +272,10 @@
                     status: 1
                 },
                 // 权限
-                power: JSON.parse(window.sessionStorage.getItem("user")).status === 1 ? false : true, 
+                // power: JSON.parse(window.sessionStorage.getItem("user")).status === 1 ? false : true, 
+                power: JSON.parse(window.sessionStorage.getItem("user")).status, 
+                // 登录用户的id
+                loginUserId: JSON.parse(window.sessionStorage.getItem("user")).id, 
                 userStatus: [
                     "", 
                     "1", 
@@ -361,6 +367,7 @@
             },
             showEditEmpView(data) {
                 this.title = '编辑用户信息';
+                this.updateOrAddPassword = '旧密码';
                 // 验证修改的密码是否与之前的密码相同，不过用户万一不想改密码呢。。
                 // this.newUser.newPassword = data.password;
                 // 不允许编辑用户名
@@ -464,6 +471,7 @@
             showAddEmpView() {
                 this.emptyUser();
                 this.title = '添加用户';
+                this.updateOrAddPassword = '登陆密码';
                 // 将用户名的框启用
                 this.isEditUser = false;
                 this.dialogVisible = true;
@@ -491,6 +499,14 @@
                     } else if (resp.status === 200) {
                         this.users = resp.obj.data;
                         this.total = resp.obj.total;
+
+                        // 将 1 2 3 转为文本意思
+                        if(this.users.length != 0) {
+                            this.users.forEach(v => {
+                                // alert(JSON.stringify(v));
+                                v.textStatus = (v.status === 1 ? '普通用户' : v.status === 2 ? '管理员' : '开发者');
+                            });
+                        }
                     } else if (resp.status != 200) {
                         this.users = null;
                         this.total = 0;

@@ -161,9 +161,9 @@
                 }
             }
         },
-        mounted() {
-            this.initUsers();
-        },
+        // mounted() {
+        //     this.initUsers();
+        // },
         methods: {
             // 添加用户是重置输入框
              resetForm(formName) {

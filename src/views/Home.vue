@@ -4,14 +4,14 @@
             <el-header class="homeHeader">
                 <div class="title">广科大</div>
                 <div>
-                    <el-button icon="el-icon-bell" type="text" style="margin-right: 8px;color: #000000;" size="normal" @click="goChat"></el-button>
+                    <!-- <el-button icon="el-icon-bell" type="text" style="margin-right: 8px;color: #000000;" size="normal" @click="goChat"></el-button> -->
                     <el-dropdown class="userInfo" @command="commandHandler">
                         <span class="el-dropdown-link">
-                            {{user.loginname}}<i><img src="http://bpic.588ku.com/element_pic/01/40/00/64573ce2edc0728.jpg" alt=""></i>
+                            {{user.loginname}}<i><img src="64573ce2edc0728.jpg" alt=""></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <!-- <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>
-                            <el-dropdown-item command="setting">设置</el-dropdown-item> -->
+                            <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>
+                            <!-- <el-dropdown-item command="setting">设置</el-dropdown-item> -->
                             <el-dropdown-item command="logout" divided>注销登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -90,7 +90,7 @@
                         });
                     });
                 }else if (cmd == 'userinfo') {
-                    this.$router.push('/hrinfo');
+                    this.$router.push('/userinfo');
                 }
             }
         }

@@ -29,7 +29,7 @@
                     <el-upload
                     class="upload"
                     drag
-                    action="uploadFileUrl"
+                    action="http://47.106.99.53:8082/document/basic/"
                     :before-upload="beforeUpload"
                     :auto-upload="false"
                     :on-success="uploadSuccess"
@@ -67,7 +67,7 @@ export default {
                     title: '', 
                     remark: ''
                 }, 
-                uploadFileUrl: 'http://localhost:8080/document/basic/',
+                // uploadFileUrl: 'http://47.106.99.53:8082/document/basic/',
                 isHaveFile: false, 
                 rules: {
                     title: [{required: true, message: '请输入文档标题！', trigger: 'blur'}],
