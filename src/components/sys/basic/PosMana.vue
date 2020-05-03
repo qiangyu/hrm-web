@@ -20,29 +20,30 @@
                     style="width: 70%">
                 <el-table-column
                         type="selection"
-                        width="55">
+                        width="50">
                 </el-table-column>
                 <el-table-column
                         prop="id"
                         label="编号"
-                        width="55">
+                        width="50">
                 </el-table-column>
                 <el-table-column
                         prop="name"
                         label="职位名称"
-                        width="180">
+                        width="200">
                 </el-table-column>
                 <el-table-column
                         prop="remark"
                         label="职位描述"
-                        width="180">
+                        width="250">
                 </el-table-column>
                 <el-table-column
                         prop="createDate"
-                        width="250"
+                        width="150"
                         label="创建时间">
                 </el-table-column>
                 <el-table-column
+                        width="150"
                         label="是否启用">
                     <template slot-scope="scope">
                         <el-tag size="small" type="success" v-if="scope.row.enabled">已启用</el-tag>
@@ -54,20 +55,20 @@
                         <el-button
                                 size="mini"
                                 @click="showEditView(scope.$index, scope.row)"
-                                 v-if="power">编辑
+                                :disabled="!power">编辑
                         </el-button>
                         <el-button
                                 size="mini"
                                 type="danger"
                                 @click="handleDelete(scope.$index, scope.row)"
-                                 v-if="power">删除
+                                :disabled="!power">删除
                         </el-button>
-                        <p v-if="!power">权限不足，无法操作</p>
+                        <!-- <p v-if="!power">权限不足，无法操作</p> -->
                     </template>
                 </el-table-column>
             </el-table>
             <el-button @click="deleteMany" type="danger" size="small" style="margin-top: 8px"
-                       :disabled="multipleSelection.length==0">批量删除
+                       :disabled="multipleSelection.length == 0 || !power">批量删除
             </el-button>
         </div>
         <el-dialog
@@ -137,12 +138,12 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    // let ids = '?';
-                    let ids = []; 
-                    this.multipleSelection.forEach((item, index) => {
-                        ids[index] = item.id;
-                    })
-                    this.deleteRequest("/position/basic/", ids).then(resp => {
+                    // // let ids = '?';
+                    // let ids = []; 
+                    // this.multipleSelection.forEach((item, index) => {
+                    //     ids[index] = item.id;
+                    // })
+                    this.deleteRequest("/position/basic/ids/", this.multipleSelection).then(resp => {
                         if (resp.status === 20000402) {
                             // 用户没登录，跳转至登录页面
                             this.$router.replace('/');
@@ -186,7 +187,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.deleteRequest("/position/basic/" + data.id).then(resp => {
+                    this.deleteRequest("/position/basic/", data).then(resp => {
                         if (resp.status === 20000402) {
                             // 用户没登录，跳转至登录页面
                             this.$router.replace('/');

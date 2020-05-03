@@ -2,7 +2,7 @@
     <div>
         <el-container>
             <el-header class="homeHeader">
-                <div class="title">广科大</div>
+                <div class="title">管理系统</div>
                 <div>
                     <!-- <el-button icon="el-icon-bell" type="text" style="margin-right: 8px;color: #000000;" size="normal" @click="goChat"></el-button> -->
                     <el-dropdown class="userInfo" @command="commandHandler">
@@ -37,7 +37,10 @@
                         <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
                     </el-breadcrumb>
                     <div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
-                        欢迎来到人力资源管理系统！xiaoyu...
+                        欢迎来到人力资源管理系统！
+                    </div>
+                    <div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
+                        项目开源地址：https://github.com/itqiangyu/xiaoyu-hrm
                     </div>
                     <router-view class="homeRouterView"/>
                 </el-main>

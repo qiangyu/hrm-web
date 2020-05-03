@@ -33,7 +33,7 @@
                     <el-button type="success" @click="exportData" icon="el-icon-download">
                         导出数据
                     </el-button> -->
-                    <el-button type="primary" icon="el-icon-plus" @click="showAddEmpView" v-if="power">
+                    <el-button type="primary" icon="el-icon-plus" @click="showAddEmpView" :disabled="!power">
                         添加用户
                     </el-button>
                 </div>
@@ -134,12 +134,12 @@
                 <el-table-column
                         align="left"
                         label="操作"
-                        width="145">
+                        width="190">
                     <template slot-scope="scope">
-                        <el-button v-if="loginUserId === scope.row.id || (power != 1 && scope.row.status != 3 && !(power === 2 && scope.row.status === 2))" @click="showEditEmpView(scope.row)" style="padding: 3px; margin-left: 15px; margin-right: 15px" size="medium">编辑</el-button>
-                        <!-- <el-button style="padding: 3px" size="mini" type="primary">查看高级资料</el-button> -->
-                        <el-button v-if="loginUserId === scope.row.id || (power != 1 && scope.row.status != 3 && !(power === 2 && scope.row.status === 2))" style="padding: 3px" size="medium" type="danger">删除</el-button>
-                        <p v-if="loginUserId != scope.row.id && (power === 1 || scope.row.status === 3 || (power === 2 && scope.row.status === 2))" style="color: red;">权限不足，无法操作</p>
+                        <el-button :disabled="loginUserId !== scope.row.id || (power === 1 && scope.row.status === 3 && !(power !== 2 && scope.row.status !== 2))" @click="showUpdateUserInfoView(scope.row)" style="padding: 3px; margin-left: 2px" size="mini">编辑信息</el-button>
+                        <el-button :disabled="loginUserId !== scope.row.id || (power === 1 && scope.row.status === 3 && !(power !== 2 && scope.row.status !== 2))" @click="showUpdatePasswdView(scope.row)" style="padding: 3px" size="mini" type="primary">修改密码</el-button>
+                        <el-button :disabled="loginUserId !== scope.row.id || (power === 1 && scope.row.status === 3 && !(power !== 2 && scope.row.status !== 2))" @click="deleteUser(scope.row)" style="padding: 3px" size="mini" type="danger">删除</el-button>
+                        <!-- <p v-if="loginUserId !== scope.row.id && (power === 1 || scope.row.status === 3 || (power === 2 && scope.row.status === 2))" style="color: red; text-align: center;">权限不足，无法操作</p> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -153,6 +153,7 @@
                 </el-pagination>
             </div>
         </div>
+        <!-- 新增用户弹窗 -->
         <el-dialog
                 :title="title"
                 :visible.sync="dialogVisible"
@@ -173,7 +174,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="4">
-                            <el-form-item :label="updateOrAddPassword" prop="password">
+                            <el-form-item label="新密码" prop="password">
                                 <el-input type="password" size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.password"
                                           placeholder="请输入密码"></el-input>
                             </el-form-item>
@@ -202,6 +203,53 @@
                 <el-button type="primary" @click="doAddUser">确 定</el-button>
             </span>
         </el-dialog>
+        <!-- 修改信息弹窗 -->
+        <el-dialog
+                title="修改用户信息"
+                :visible.sync="updateDialogVisible"
+                width="30%">
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <el-tag>用户昵称：</el-tag>
+                        </td>
+                        <td>
+                            <el-input v-model="updateUser.username"></el-input>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="updateDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="updateUserInfo">确 定</el-button>
+            </span>
+        </el-dialog>
+        <!-- 修改密码弹窗 -->
+        <el-dialog
+                title="修改密码"
+                :visible.sync="passwordDialogVisible"
+                width="30%">
+            <div>
+                <el-form :model="ruleForm" status-icon :rules="updatePasswordRules" ref="ruleForm" label-width="100px"
+                         class="demo-ruleForm">
+                    <el-form-item label="输入旧密码" prop="password">
+                        <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="输入新密码" prop="newPassword">
+                        <el-input type="password" v-model="ruleForm.newPassword" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="新确认密码" prop="checkPassword">
+                        <el-input type="password" v-model="ruleForm.checkPassword" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitPasswordForm('ruleForm')">提交</el-button>
+                        <el-button @click="passwordDialogVisible = false">取消</el-button>
+                        <el-button @click="resetForm('ruleForm')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -209,6 +257,16 @@
     export default {
         name: "UserBasic",
         data() {
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.ruleForm.checkPassword !== '') {
+                        this.$refs.ruleForm.validateField('checkPassword');
+                    }
+                    callback();
+                }
+            };
             var checkPasswordFun = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请再次输入密码!'));
@@ -220,6 +278,15 @@
                 // if (this.newUser.newPassword != null || this.newUser.newPassword != '') {
                 //     callback(new Error('密码不能与之前的相同！'));
                 // }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.ruleForm.newPassword) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
             };
             var powerFun = (rule, value, callback) => {
                 if (value == '1') {
@@ -234,21 +301,33 @@
                 // }
             };
             return {
+                // 搜索的信息
                 searchValue: {
                     username: '', 
                     loginname: '', 
                     status: null
                 },
+                // 修改密码信息
+                ruleForm: {
+                    password: '',
+                    newPassword: '',
+                    checkPassword: ''
+                },
                 // 添加或修改弹窗的标题
                 title: '',
-                // 添加或修改弹窗的密码输入框
-                updateOrAddPassword: '密码', 
                 importDataBtnText: '导入数据',
                 importDataBtnIcon: 'el-icon-upload2',
                 importDataDisabled: false,
                 showAdvanceSearchView: false,
                 // 保存查询出用户的信息
                 users: [],
+                // user: null,
+                updateUser: [],
+                // 修改信息弹框
+                updateDialogVisible: false,
+                // 修改密码弹框
+                passwordDialogVisible: false, 
+
                 loading: false,
                 popVisible: false,
                 popVisible2: false,
@@ -311,7 +390,21 @@
                     ]
 
                     // [{required: true, message: '请确认密码', trigger: 'blur'}]
-
+                }, 
+                updatePasswordRules: {
+                    password: [{required: true, message: '请输入密码！', trigger: 'blur'}, {
+                        pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/g, 
+                        message: '旧密码由字母数字组成6-16位！', 
+                        trigger: 'blur'
+                    }],
+                    newPassword: [{required: true, message: '请输入新密码！', trigger: 'blur'}, {
+                        pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/g, 
+                        message: '新密码由字母数字组成6-16位！', 
+                        trigger: 'blur'
+                    }],
+                    checkPassword: [
+                        { validator: validatePass2, trigger: 'blur' }
+                    ]
                 }
             }
         },
@@ -330,7 +423,22 @@
              resetForm(formName) {
                 this.emptyUser();
                 this.$refs[formName].resetFields();
-            }, 
+            },
+            // 显示修改用户信息弹框 
+            showUpdateUserInfoView(data) {
+                this.updateDialogVisible = true;
+                this.updateUser = Object.assign({}, data);
+                // this.updateUser.id = data.id;
+                // this.updateUser.username = data.username;
+            },
+            // 显示修改密码弹框
+            showUpdatePasswdView(data) {
+                this.passwordDialogVisible = true;
+                this.ruleForm = Object.assign({}, data);
+                // this.ruleForm.id = data.id;
+                // this.ruleForm.loginname = data.loginname;
+
+            },
             searvhViewHandleNodeClick(data) {
                 this.inputDepName = data.name;
                 this.searchValue.departmentId = data.id;
@@ -367,7 +475,6 @@
             },
             showEditEmpView(data) {
                 this.title = '编辑用户信息';
-                this.updateOrAddPassword = '旧密码';
                 // 验证修改的密码是否与之前的密码相同，不过用户万一不想改密码呢。。
                 // this.newUser.newPassword = data.password;
                 // 不允许编辑用户名
@@ -385,28 +492,70 @@
 
                 this.dialogVisible = true;
             },
-            deleteEmp(data) {
-                this.$confirm('此操作将永久删除【' + data.name + '】, 是否继续?', '提示', {
+            deleteUser(data) {
+                this.$confirm('此操作将永久删除账号【 ' + data.loginname + ' 】, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.deleteRequest("/user/basic/" + data.id).then(resp => {
-                        if (resp.status === 20000402) {
-                            // window.sessionStorage.removeItem('user');
-                            // window.localStorage.removeItem('token');
-                            // 用户没登录，跳转至登录页面
-                            this.$router.replace('/');
-                        } else if (resp.status === 200) {
-                            this.initUsers();
-                        }
-                    })
+                    if (data.id && data.loginname) {
+                        this.deleteRequest("/user/basic/", data).then(resp => {
+                            if (resp.status === 20000402) {
+                                // window.sessionStorage.removeItem('user');
+                                // window.localStorage.removeItem('token');
+                                // 用户没登录，跳转至登录页面
+                                this.$router.replace('/');
+                            } else if (resp.status === 200) {
+                                this.initUsers();
+                            }
+                        })
+                    }
                 }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: '已取消删除'
                     });
                 });
+            },
+            // 修改密码
+            submitPasswordForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid && this.ruleForm.loginname) {
+                        // this.ruleForm.id = this.user.id;
+                        this.putRequest("/user/basic/", this.ruleForm).then(resp => {
+                            if (resp.status === 20000402) {
+                                // 用户没登录，跳转至登录页面
+                                this.$router.replace('/');
+                            } else if (resp.status === 200) {
+                                this.getRequest("/user/logout");
+                                // 从session移除用户信息
+                                window.sessionStorage.removeItem("user")
+                                // 从本地移除token
+                                window.localStorage.removeItem('token');
+                                this.$store.commit('initRoutes', []);
+                                this.$router.replace("/");
+                            }
+                        })
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            // 修改昵称
+            updateUserInfo() {
+                if(this.updateUser.id) {
+                    this.putRequest("/user/basic/", this.updateUser).then(resp => {
+                        if (resp.status === 20000402) {
+                            // 用户没登录，跳转至登录页面
+                            this.$router.replace('/');
+                        } else if (resp.status === 200) {
+                            this.updateDialogVisible = false;
+                            // 从session移除用户信息
+                            // window.sessionStorage.removeItem("user");
+                            this.initUsers();
+                        }
+                    })
+                }
             },
             doAddUser() {
                 // 有id表示编辑
@@ -432,8 +581,7 @@
                 } else {
                     this.$refs['newUser'].validate(valid => {
                         if (valid) {
-                            let that = this;
-                            this.postRequest("/user/basic/", that.newUser).then(resp => {
+                            this.postRequest("/user/basic/", this.newUser).then(resp => {
                                 // alert(JSON.stringify(this.newUser));
                                 if (resp.status === 20000402) {
                                     // window.sessionStorage.removeItem('user');
@@ -441,8 +589,8 @@
                                     // 用户没登录，跳转至登录页面
                                     this.$router.replace('/');
                                 } else if (resp.status === 200) {
-                                    that.dialogVisible = false;
-                                    that.initUsers();
+                                    this.dialogVisible = false;
+                                    this.initUsers();
                                 }
                             })
                         }
@@ -471,7 +619,6 @@
             showAddEmpView() {
                 this.emptyUser();
                 this.title = '添加用户';
-                this.updateOrAddPassword = '登陆密码';
                 // 将用户名的框启用
                 this.isEditUser = false;
                 this.dialogVisible = true;
@@ -504,7 +651,7 @@
                         if(this.users.length != 0) {
                             this.users.forEach(v => {
                                 // alert(JSON.stringify(v));
-                                v.textStatus = (v.status === 1 ? '普通用户' : v.status === 2 ? '管理员' : '开发者');
+                                v.textStatus = (v.status === 1 ? '普通用户' : v.status === 2 ? '管理员' : v.status === 3 ? '开发者' : '权限异常');
                             });
                         }
                     } else if (resp.status != 200) {

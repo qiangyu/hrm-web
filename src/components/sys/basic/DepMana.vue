@@ -11,8 +11,9 @@
                 :props="defaultProps"
                 :expand-on-click-node="false"
                 :filter-node-method="filterNode"
-                ref="tree">
-            <span class="custom-tree-node" style="display: flex;justify-content: space-between;width: 100%;"
+                ref="tree"
+                style="margin-top: 20px">
+            <span class="custom-tree-node" style="display: flex; justify-content: space-between; width: 100%;"
                   slot-scope="{ node, data }" :title="data.remark">
                 <span style="font-size: 20px;">{{data.name }}</span>
                 <span>
@@ -21,7 +22,7 @@
                             size="mini"
                             class="depBtn"
                             @click="() => addDep(data)"
-                            v-if="power">
+                            :disabled="!power">
                         添加部门
                     </el-button>
                     <el-button
@@ -29,7 +30,7 @@
                             size="mini"
                             class="depBtn"
                             @click="() => deleteDep(data)"
-                            v-if="power">
+                            :disabled="!power">
                         删除部门
                     </el-button>
                 </span>
@@ -164,14 +165,16 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                       this.deleteRequest("/department/basic/"+data.id).then(resp=>{
-                           if (resp.status === 20000402) {
-                                // 用户没登录，跳转至登录页面
-                                this.$router.replace('/');
-                            } else if (resp.status === 200) {
-                                this.removeDepFromDeps(null,this.deps,data.id);
-                            }
-                       })
+                        if (data.id && data.name) {
+                            this.deleteRequest("/department/basic/", data).then(resp=>{
+                                if (resp.status === 20000402) {
+                                    // 用户没登录，跳转至登录页面
+                                    this.$router.replace('/');
+                                } else if (resp.status === 200) {
+                                    this.removeDepFromDeps(null,this.deps,data.id);
+                                }
+                            })
+                        }
                     }).catch(() => {
                         this.$message({
                             type: 'info',

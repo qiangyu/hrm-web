@@ -88,8 +88,8 @@
                         width="150"
                         label="操作">
                     <template slot-scope="scope">
-                        <el-button v-if="power" @click="showEditDocuView(scope.row)" style="padding: 3px" size="mini">编辑</el-button>
-                        <el-button v-if="power" @click="deleteEmp(scope.row)" style="padding: 3px" size="mini" type="danger">删除</el-button>
+                        <el-button :disabled="!power" @click="showEditDocuView(scope.row)" style="padding: 3px" size="mini">编辑</el-button>
+                        <el-button :disabled="!power" @click="deleteEmp(scope.row)" style="padding: 3px" size="mini" type="danger">删除</el-button>
                         <el-button @click="downloadDocument(scope.row)" style="padding: 3px" size="mini">下载</el-button>
                         <!-- <p v-if="!power" style="color: red;">权限不足，无法操作</p> -->
                     </template>

@@ -33,8 +33,8 @@
                     <el-button type="success" @click="exportData" icon="el-icon-download">
                         导出数据
                     </el-button> -->
-                    <el-button v-if="power" type="primary" icon="el-icon-plus" @click="showAddEmpView">
-                        添加用户
+                    <el-button :disabled="!power" type="primary" icon="el-icon-plus" @click="showAddEmpView">
+                        添加员工
                     </el-button>
                 </div>
             </div>
@@ -234,16 +234,16 @@
                         width="150"
                         label="操作">
                     <template slot-scope="scope">
-                        <el-button v-if="power" @click="showEditEmpView(scope.row)" style="padding: 3px" size="mini">编辑</el-button>
+                        <el-button :disabled="!power" @click="showEditEmpView(scope.row)" style="padding: 3px" size="mini">编辑</el-button>
                         <!-- <el-button style="padding: 3px" size="mini" type="primary">查看高级资料</el-button> -->
-                        <el-button v-if="power" @click="deleteEmp(scope.row)" style="padding: 3px" size="mini" type="danger">删除
+                        <el-button :disabled="!power" @click="deleteEmp(scope.row)" style="padding: 3px" size="mini" type="danger">删除
                         </el-button>
-                        <p v-if="!power" style="color: red;">权限不足，无法操作</p>
+                        <!-- <p v-if="!power" style="color: red;">权限不足，无法操作</p> -->
                     </template>
                 </el-table-column>
             </el-table>
             <el-button @click="deleteMany" type="danger" size="small" style="margin-top: 8px"
-                       :disabled="multipleSelection.length==0">批量删除
+                       :disabled="multipleSelection.length == 0 || !power">批量删除
             </el-button>
             <div style="display: flex;justify-content: flex-end">
                 <el-pagination
@@ -599,19 +599,16 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    // let ids = '?';
-                    let ids = []; 
-                    this.multipleSelection.forEach((item, index) => {
-                        ids[index] = item.id;
-                    })
-                    this.deleteRequest("/employee/basic/", ids).then(resp => {
-                        if (resp.status === 20000402) {
-                            // 用户没登录，跳转至登录页面
-                            this.$router.replace('/');
-                        } else if (resp.status === 200) {
-                            this.initEmps();
-                        }
-                    })
+                    if (this.multipleSelection) {
+                        this.deleteRequest("/employee/basic/ids/", this.multipleSelection).then(resp => {
+                            if (resp.status === 20000402) {
+                                // 用户没登录，跳转至登录页面
+                                this.$router.replace('/');
+                            } else if (resp.status === 200) {
+                                this.initEmps();
+                            }
+                        })
+                    }
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -725,14 +722,16 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.deleteRequest("/employee/basic/" + data.id).then(resp => {
-                        if (resp.status === 20000402) {
-                            // 用户没登录，跳转至登录页面
-                            this.$router.replace('/');
-                        } else if (resp.status === 200) {
-                            this.initEmps();
-                        }
-                    })
+                    if (data.id && data.name) {
+                        this.deleteRequest("/employee/basic/", data).then(resp => {
+                            if (resp.status === 20000402) {
+                                // 用户没登录，跳转至登录页面
+                                this.$router.replace('/');
+                            } else if (resp.status === 200) {
+                                this.initEmps();
+                            }
+                        })
+                    }
                 }).catch(() => {
                     this.$message({
                         type: 'info',

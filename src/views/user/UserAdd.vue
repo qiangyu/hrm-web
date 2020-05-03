@@ -1,12 +1,12 @@
 <template>
     <div>
         <div>
-            <div style="display: flex;justify-content: space-between" v-if="power">
-                <el-button type="primary" icon="el-icon-plus" @click="showAddEmpView">
+            <div style="display: flex;justify-content: space-between">
+                <el-button :disabled="!power" type="primary" icon="el-icon-plus" @click="showAddEmpView">
                     添加用户
                 </el-button>
             </div>
-            <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p>
+            <!-- <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p> -->
         </div>
         <el-dialog
                 :title="title"

@@ -1,10 +1,10 @@
 <template>
     <div>
         <div>
-            <el-button v-if="power" type="primary" icon="el-icon-plus" @click="jump()">
+            <el-button :disabled="!power" type="primary" icon="el-icon-plus" @click="jump()">
                     添加部门
                 </el-button>
-            <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p>
+            <!-- <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p> -->
         </div>
         
     </div>

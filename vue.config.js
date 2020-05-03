@@ -3,14 +3,7 @@ let proxyObj = {};
 //     ws: true,
 //     target: "ws://localhost:8081"
 // };
-// proxyObj['/'] = {
-//     ws: false,
-//     target: 'http://47.106.99.53:8081',
-//     changeOrigin: true,
-//     pathRewrite: {
-//         '^/': ''
-//     }
-// }
+// 本地开发环境
 proxyObj['/'] = {
     ws: false,
     target: 'http://localhost:8081',
@@ -19,6 +12,15 @@ proxyObj['/'] = {
         '^/': ''
     }
 }
+// 生产环境
+// proxyObj['/'] = {
+//     ws: false,
+//     target: 'http://47.106.99.53:8081',
+//     changeOrigin: true,
+//     pathRewrite: {
+//         '^/': ''
+//     }
+// }
 module.exports = {
     publicPath: '', 
     outputDir: 'dist', 

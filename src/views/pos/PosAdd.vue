@@ -1,7 +1,8 @@
 <template>
     <div>
-        <div style="margin-bottom: 10px;"  v-if="power">
+        <div style="margin-bottom: 10px;"  >
             <el-input
+                    :disabled="!power"
                     size="small"
                     class="addPosInput"
                     v-loading="loading"
@@ -14,8 +15,9 @@
                     v-model="pos.name">
             </el-input>
         </div>
-        <div v-if="power">
+        <div>
             <el-input
+                    :disabled="!power"
                     size="small"
                     class="addPosInput"
                     v-loading="loading"
@@ -29,9 +31,9 @@
                     style="margin-right: 20px;">
             </el-input>
         
-        <el-button icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
+        <el-button :disabled="!power" icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
         </div>
-        <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p>
+        <!-- <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p> -->
     </div>
 </template>
 

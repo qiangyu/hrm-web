@@ -24,9 +24,9 @@
                 <!-- <div>用户密码：
                     <el-tag>{{user.password}}</el-tag>
                 </div> -->
-                <div style="margin-top: 10px">用户标签：
+                <div style="margin-top: 10px">用户权限：
                     <el-tag type="success" style="margin-right: 5px">
-                        {{user.status === 1 ? '普通用户' : user.status === 2 ? '管理员' : '开发者'}}
+                        {{user.status === 1 ? '普通用户' : user.status === 2 ? '管理员' : user.status === 3 ? '开发者' : '权限异常'}}
                     </el-tag>
                 </div>
                 <div style="display: flex;justify-content: space-around; margin-top: 20px">
@@ -49,36 +49,12 @@
                             <el-input v-model="user2.username"></el-input>
                         </td>
                     </tr>
-                    <!-- <tr>
-                        <td>
-                            <el-tag>电话号码：</el-tag>
-                        </td>
-                        <td>
-                            <el-input v-model="user2.telephone"></el-input>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <el-tag>手机号码：</el-tag>
-                        </td>
-                        <td>
-                            <el-input v-model="user2.phone"></el-input>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <el-tag>用户地址：</el-tag>
-                        </td>
-                        <td>
-                            <el-input v-model="user2.address"></el-input>
-                        </td>
-                    </tr> -->
                 </table>
             </div>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="updateUserInfo">确 定</el-button>
-  </span>
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="updateUserInfo">确 定</el-button>
+            </span>
         </el-dialog>
         <el-dialog
                 title="修改密码"
@@ -87,10 +63,10 @@
             <div>
                 <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px"
                          class="demo-ruleForm">
-                    <el-form-item label="请输入旧密码" prop="password">
+                    <el-form-item label="输入旧密码" prop="password">
                         <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="请输入新密码" prop="newPassword">
+                    <el-form-item label="输入新密码" prop="newPassword">
                         <el-input type="password" v-model="ruleForm.newPassword" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="新确认密码" prop="checkPass">
@@ -98,7 +74,7 @@
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                        <el-button type="primary" @click="passwdDialogVisible = false">取消</el-button>
+                        <el-button @click="passwdDialogVisible = false">取消</el-button>
                         <el-button @click="resetForm('ruleForm')">重置</el-button>
                     </el-form-item>
                 </el-form>
@@ -137,15 +113,28 @@
                     checkPass: ''
                 },
                 rules: {
-                    password: [
-                        {validator: validatePass, trigger: 'blur'}
-                    ],
-                    newPassword: [
-                        {validator: validatePass, trigger: 'blur'}
-                    ],
-                    checkPass: [
-                        {validator: validatePass2, trigger: 'blur'}
+                    password: [{required: true, message: '请输入旧密码！', trigger: 'blur'}, {
+                        pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/g, 
+                        message: '密码由字母数字组成6-16位！', 
+                        trigger: 'blur'
+                    }],
+                    newPassword: [{required: true, message: '请输入新密码！', trigger: 'blur'}, {
+                        pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/g, 
+                        message: '新密码由字母数字组成6-16位！', 
+                        trigger: 'blur'
+                    }],
+                    checkPassword: [
+                        { validator: validatePass2, trigger: 'blur' }
                     ]
+                    // password: [
+                    //     {validator: validatePass, trigger: 'blur'}
+                    // ],
+                    // newPassword: [
+                    //     {validator: validatePass, trigger: 'blur'}
+                    // ],
+                    // checkPass: [
+                    //     {validator: validatePass2, trigger: 'blur'}
+                    // ]
                 },
                 user: null,
                 user2: [],
@@ -206,6 +195,7 @@
             },
             showUpdatePasswdView() {
                 this.passwdDialogVisible = true;
+                this.ruleForm = Object.assign({}, this.user);
             },
             initHr() {
                 this.getRequest('/user/info/').then(resp => {
