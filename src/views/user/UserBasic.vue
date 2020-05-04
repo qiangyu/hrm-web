@@ -33,7 +33,7 @@
                     <el-button type="success" @click="exportData" icon="el-icon-download">
                         导出数据
                     </el-button> -->
-                    <el-button type="primary" icon="el-icon-plus" @click="showAddEmpView" :disabled="!power">
+                    <el-button :disabled="!(power === 1 ? false : true)" type="primary" icon="el-icon-plus" @click="showAddEmpView">
                         添加用户
                     </el-button>
                 </div>
@@ -105,7 +105,7 @@
                         prop="username"
                         align="left"
                         label="用户名"
-                        width="100">
+                        width="125">
                 </el-table-column>
                 <el-table-column
                         prop="loginname"
