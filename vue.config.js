@@ -22,14 +22,5 @@ module.exports = {
         host: 'localhost',
         port: 8080,
         proxy: proxyObj
-        // proxy: {
-        //     '/api': {
-        //         target: 'http://47.106.99.53:8081/',
-        //         changeOrigin: true,
-        //         pathRewrite: {
-        //             '^/api': ''
-        //         }
-        //     }
-        // }, 
     }
 }
