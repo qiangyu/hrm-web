@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <el-form :model="documentContent" :rules="rules" ref="documentContent">
-            <div class="input" style="margin-bottom: 50px;">
+    <div style="display: flex; justify-content: space-between; margin: 30px 10px;">
+        <div style="border: 2px solid skyblue; padding: 20px; width: 30%;">
+            <el-form :model="documentContent" :rules="rules" ref="documentContent">
                 <el-form-item label="文档标题:" prop="title">
                     <el-input
                         type="text"
@@ -11,7 +11,6 @@
                         show-word-limit
                         style="font-size: 20px;"></el-input>
                 </el-form-item>
-                <div style="margin: 20px 0;"></div>
                 <el-form-item label="文档描述:" prop="remark">
                     <el-input
                         type="textarea"
@@ -22,36 +21,32 @@
                         show-word-limit
                         style="font-size: 20px"></el-input>
                 </el-form-item>
-            </div>
-            
-                <div style="margin-top: 50px;">
-                    <el-form-item label="文档内容:" prop="content">
+                <el-form-item label="文档内容:" prop="content">
                     <el-upload
-                    class="upload"
-                    drag
-                    action="http://47.106.99.53:8082/document/basic/"
-                    :before-upload="beforeUpload"
-                    :auto-upload="false"
-                    :on-success="uploadSuccess"
-                    :on-change="changeFile"
-                    :on-error="uploadError"
-                    :data="documentData"
-                    ref="upload"
-                    :headers="myHeader"
-                    limit=1>
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        class="upload"
+                        drag
+                        :action="uploadFileUrl"
+                        :before-upload="beforeUpload"
+                        :auto-upload="false"
+                        :on-success="uploadSuccess"
+                        :on-change="changeFile"
+                        :on-error="uploadError"
+                        :data="documentData"
+                        ref="upload"
+                        :headers="myHeader"
+                        limit=1>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">每次只能上传单个文件，且不超过10MB</div>
                     </el-upload>
-                    </el-form-item>
-                </div> 
-                
-        </el-form>
-        <span slot="footer" class="dialog-footer" style="margin-left: 25%;">
-                    <el-button @click="cancel">取 消</el-button>
-                    <el-button @click="resetForm('documentContent')">重置</el-button>
-                    <el-button type="primary" @click="doAddDocument">确 定</el-button>
-                </span>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer" style="margin-left: 25%;">
+                <el-button @click="cancel">取 消</el-button>
+                <el-button @click="resetForm('documentContent')">重置</el-button>
+                <el-button type="primary" @click="doAddDocument">确 定</el-button>
+            </span>
+        </div>
     </div>
 </template>
 
@@ -67,7 +62,7 @@ export default {
                     title: '', 
                     remark: ''
                 }, 
-                // uploadFileUrl: 'http://47.106.99.53:8082/document/basic/',
+                uploadFileUrl: '/document/basic/',
                 isHaveFile: false, 
                 rules: {
                     title: [{required: true, message: '请输入文档标题！', trigger: 'blur'}],
@@ -171,8 +166,5 @@ export default {
 </script>
 
 <style>
-    /* @import url("//unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css"); */
-    .input {
-        width: 30%;
-    }
+
 </style>

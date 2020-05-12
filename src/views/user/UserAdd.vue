@@ -1,50 +1,47 @@
 <template>
-    <div>
-        <div style="display: flex; justify-content: space-between; margin: 30px 10px;">
-            <div style="border: 2px solid skyblue; padding: 20px; margin: 0 auto; width: 80%;">
-                <el-form :model="newUser" :rules="rules" ref="newUser" :disabled="!power">
-                    <el-row style="text-align: center;">
-                        <el-col :span="4">
-                            <el-form-item label="用户名:" prop="username">
-                                <el-input size="small " maxlength="10" style="width: 140px" prefix-icon="el-icon-edit" v-model="newUser.username"
-                                        placeholder="请输入用户名"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-form-item label="用户账号:" prop="loginname">
-                                <el-input size="small " maxlength="16" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.loginname"
-                                        placeholder="请输入用户账号" :disabled="isEditUser"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="4">
-                            <el-form-item label="密码:" prop="password">
-                                <el-input type="password" size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.password"
-                                        placeholder="请输入密码"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-form-item label="确认密码:" prop="checkPassword">
-                                <el-input type="password" size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.checkPassword"
-                                        placeholder="请确认密码"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="用户状态:" prop="status">
-                                <el-radio-group v-model="newUser.status">
-                                    <el-radio label="1">普通用户</el-radio>
-                                    <el-radio label="2">管理员</el-radio>
-                                </el-radio-group>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </div>
-            <span slot="footer" class="dialog-footer" style="margin-top: 30px">
-                <el-button :disabled="!power" @click="resetForm('newUser')">重置</el-button>
-                <el-button :disabled="!power" type="primary" @click="doAddUser">确 定</el-button>
-            </span>
+    <div style="display: flex; justify-content: space-between; margin: 30px 10px;">
+        <div style="border: 2px solid skyblue; padding: 20px; margin: 0 auto; width: 80%;">
+            <el-form :model="newUser" :rules="rules" ref="newUser" :disabled="!power">
+                <el-row style="text-align: center;">
+                    <el-col :span="4">
+                        <el-form-item label="用户名:" prop="username">
+                            <el-input size="small " maxlength="10" style="width: 140px" prefix-icon="el-icon-edit" v-model="newUser.username"
+                                    placeholder="请输入用户名"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-form-item label="用户账号:" prop="loginname">
+                            <el-input size="small " maxlength="16" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.loginname"
+                                    placeholder="请输入用户账号" :disabled="isEditUser"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-form-item label="密码:" prop="password">
+                            <el-input type="password" size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.password"
+                                    placeholder="请输入密码"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-form-item label="确认密码:" prop="checkPassword">
+                            <el-input type="password" size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.checkPassword"
+                                    placeholder="请确认密码"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="用户状态:" prop="status">
+                            <el-radio-group v-model="newUser.status">
+                                <el-radio label="1">普通用户</el-radio>
+                                <el-radio label="2">管理员</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
         </div>
-        <!-- <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p> -->
+        <span slot="footer" class="dialog-footer" style="margin-top: 30px">
+            <el-button :disabled="!power" @click="resetForm('newUser')">重置</el-button>
+            <el-button :disabled="!power" type="primary" @click="doAddUser">确 定</el-button>
+        </span>
     </div>
 </template>
 
@@ -60,9 +57,6 @@
                 } else {
                     callback();
                 }
-                // if (this.newUser.newPassword != null || this.newUser.newPassword != '') {
-                //     callback(new Error('密码不能与之前的相同！'));
-                // }
             };
             var powerFun = (rule, value, callback) => {
                 if (value == '1') {
