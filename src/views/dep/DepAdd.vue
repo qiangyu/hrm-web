@@ -1,6 +1,7 @@
 <template>
     <div>
         <div>
+            <!-- 已经弃用 -->
             <el-button :disabled="!power" type="primary" icon="el-icon-plus" @click="jump()">
                     添加部门
                 </el-button>

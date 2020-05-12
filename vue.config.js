@@ -12,15 +12,7 @@ proxyObj['/'] = {
         '^/': ''
     }
 }
-// 生产环境
-// proxyObj['/'] = {
-//     ws: false,
-//     target: 'http://47.106.99.53:8081',
-//     changeOrigin: true,
-//     pathRewrite: {
-//         '^/': ''
-//     }
-// }
+
 module.exports = {
     publicPath: '', 
     outputDir: 'dist', 

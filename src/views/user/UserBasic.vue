@@ -148,6 +148,8 @@
                         background
                         @current-change="currentChange"
                         @size-change="sizeChange"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="5"
                         layout="sizes, prev, pager, next, jumper, ->, total, slot"
                         :total="total">
                 </el-pagination>
@@ -242,7 +244,7 @@
                     <el-form-item label="新确认密码" prop="checkPassword">
                         <el-input type="password" v-model="ruleForm.checkPassword" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item>
+                    <el-form-item style="margin-top: 30px">
                         <el-button type="primary" @click="submitPasswordForm('ruleForm')">提交</el-button>
                         <el-button @click="passwordDialogVisible = false">取消</el-button>
                         <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -267,7 +269,7 @@
                     callback();
                 }
             };
-            var checkPasswordFun = (rule, value, callback) => {
+            var validateAddUserPassword = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请再次输入密码!'));
                 } else if (value !== this.newUser.password) {
@@ -275,15 +277,14 @@
                 } else {
                     callback();
                 }
-                // if (this.newUser.newPassword != null || this.newUser.newPassword != '') {
-                //     callback(new Error('密码不能与之前的相同！'));
-                // }
             };
-            var validatePass2 = (rule, value, callback) => {
+            var validateUpdateUserPassword = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请再次输入密码'));
                 } else if (value !== this.ruleForm.newPassword) {
                     callback(new Error('两次输入密码不一致!'));
+                } else if (value === this.ruleForm.password) {
+                    callback(new Error('新密码与旧密码一致!'));
                 } else {
                     callback();
                 }
@@ -296,9 +297,6 @@
                 } else {
                     callback(new Error('请选择该用户权限！'));
                 }
-                // if (this.newUser.newPassword != null || this.newUser.newPassword != '') {
-                //     callback(new Error('密码不能与之前的相同！'));
-                // }
             };
             return {
                 // 搜索的信息
@@ -336,7 +334,7 @@
                 total: 0,
                 page: 1,
                 keyword: '',
-                size: 10,
+                size: 5,
                 newUser: {
                     id: '', 
                     username: '', 
@@ -383,7 +381,7 @@
                         trigger: 'blur'
                     }],
                     checkPassword: [
-                        { validator: checkPasswordFun, trigger: 'blur' }
+                        { validator: validateAddUserPassword, trigger: 'blur' }
                     ], 
                     status: [
                         { validator: powerFun, trigger: 'blur' }
@@ -403,7 +401,7 @@
                         trigger: 'blur'
                     }],
                     checkPassword: [
-                        { validator: validatePass2, trigger: 'blur' }
+                        { validator: validateUpdateUserPassword, trigger: 'blur' }
                     ]
                 }
             }
@@ -622,6 +620,16 @@
                 // 将用户名的框启用
                 this.isEditUser = false;
                 this.dialogVisible = true;
+            },
+            // 行数的改变
+            sizeChange(currentSize) {
+                this.size = currentSize;
+                this.initUsers();
+            },
+            // 页数的改变
+            currentChange(currentPage) {
+                this.page = currentPage;
+                this.initUsers();
             },
             initUsers(type) {
                 this.loading = true;

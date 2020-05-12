@@ -1,23 +1,10 @@
 <template>
     <div>
-        <div>
-            <div style="display: flex;justify-content: space-between">
-                <div>
-                    <el-button :disabled="!power" type="primary" icon="el-icon-plus" @click="showAddEmpView">
-                        添加用户
-                    </el-button>
-                </div>
-                <!-- <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p> -->
-            </div>
-        </div>
-        <el-dialog
-                :title="title"
-                :visible.sync="dialogVisible"
-                width="80%">
-            <div>
-                <el-form :model="emp" :rules="rules" ref="empForm">
+        <div style="display: flex; justify-content: space-between; margin: 30px 10px;">
+            <div style="border: 2px solid skyblue; padding: 20px; margin: 0 auto; width: 80%;">
+                <el-form :model="emp" :rules="rules" ref="empForm" :disabled="!power">
                     <el-row>
-                        <el-col :span="6">
+                        <el-col :span="5">
                             <el-form-item label="姓名:" prop="name">
                                 <el-input size="mini" style="width: 150px" prefix-icon="el-icon-edit" v-model="emp.name"
                                           placeholder="请输入员工姓名"></el-input>
@@ -57,7 +44,7 @@
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="6">
+                        <el-col :span="5">
                             <el-form-item label="民族:" prop="race">
                                 <el-select v-model="emp.race" placeholder="民族" size="mini" style="width: 150px;">
                                     <el-option
@@ -89,7 +76,7 @@
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="6">
+                        <el-col :span="5">
                             <el-form-item label="职位:" prop="position.id">
                                 <el-select v-model="emp.position.id" placeholder="职位" size="mini" style="width: 150px;">
                                     <el-option
@@ -104,6 +91,7 @@
                         <el-col :span="5">
                             <el-form-item label="所属部门:" prop="department">
                                 <el-popover
+                                        :disabled="!power"
                                         placement="right"
                                         title="请选择部门"
                                         width="200"
@@ -133,7 +121,7 @@
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="6">
+                        <el-col :span="5">
                             <el-form-item label="学历:" prop="education">
                                 <el-select v-model="emp.education" placeholder="学历" size="mini"
                                            style="width: 150px;">
@@ -147,7 +135,7 @@
                             </el-form-item>
                         </el-col>
                         
-                        <el-col :span="5">
+                        <el-col :span="6">
                             <el-form-item label="专业名称:" prop="speciality">
                                 <el-input size="mini" style="width: 200px" prefix-icon="el-icon-edit"
                                           v-model="emp.speciality" placeholder="请输入专业名称"></el-input>
@@ -161,13 +149,13 @@
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="6">
+                        <el-col :span="5">
                             <el-form-item label="爱好:" prop="hobby">
                                 <el-input size="mini" style="width: 150px" prefix-icon="el-icon-edit"
                                           v-model="emp.hobby" placeholder="请输入爱好"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="5">
+                        <el-col :span="6">
                             <el-form-item label="自我描述:" prop="remark">
                                 <el-input size="mini" style="width: 200px" prefix-icon="el-icon-edit"
                                           v-model="emp.remark" placeholder="请输入对自我的描述"></el-input>
@@ -181,13 +169,13 @@
                         </el-col>
                     </el-row>
                 </el-form>
+                
             </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button @click="resetForm('empForm')" v-if="isEditEmp">重置</el-button>
-                <el-button type="primary" @click="doAddEmp">确 定</el-button>
+            <span slot="footer" class="dialog-footer" style="margin-top: 30px">
+                <el-button :disabled="!power" @click="resetForm('empForm')">重置</el-button>
+                <el-button :disabled="!power" type="primary" @click="doAddEmp">确 定</el-button>
             </span>
-        </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -196,28 +184,8 @@
         name: "EmpBasic",
         data() {
             return {
-                // 搜索数据
-                searchValue: {
-                    // 职位id
-                    positionId: null,
-                    // 部门id
-                    departmentId: null,
-                    // 身份证号码
-                    cardId: null, 
-                    // 手机号
-                    phone: null, 
-                    // 性别
-                    sex: null
-                },
-                title: '',
-                importDataBtnText: '导入数据',
-                importDataBtnIcon: 'el-icon-upload2',
-                importDataDisabled: false,
-                showAdvanceSearchView: false,
                 // 权限
-                power: JSON.parse(window.sessionStorage.getItem("user")).status == 1 ? false : true, 
-                // 搜索用户时是否显示所属部门那个框
-                showSearchDepView: false, 
+                power: JSON.parse(window.sessionStorage.getItem("user")).status === 1 ? false : true, 
                 // 添加用户时是否显示所属部门那个框
                 showAddDepView: false, 
                 // 搜索的部门信息
@@ -225,51 +193,40 @@
                 // 添加员工的部门信息备份
                 addAllDeps: [], 
                 emps: [],
-                loading: false,
 
-                popVisible: false,
-                popVisible2: false,
-
-                dialogVisible: false,
-                total: 0,
-                page: 1,
-                keyword: '',
-                size: 10,
+                // 民族信息
                 nations: [],
-                joblevels: [],
+                // 政治面貌信息
                 politicsstatus: [],
+                // 职位信息
                 positions: [],
-                isEditEmp: false, 
                 educations: [ '硕士', '博士', '本科', '大专', '高中', '初中', '小学', '其他'],
                 inputDepName: '所属部门',
+
                 emp: {
                     id: null, 
-                    name: "javaboy",
-                    sex: 1,
-                    birthday: "1989-12-31",
-                    cardId: "610122199001011256",
+                    name: null,
+                    sex: null,
+                    birthday: null,
+                    cardId: null,
                     // 民族
                     nationId: 1,
-                    race: '', 
-
+                    race: null, 
                     // 政治面貌
-                    politicId: 13,
-                    party: '', 
-                    
-                    email: "laowang@qq.com",
-                    phone: '13737214728',
-                    tel: '13737214728', 
-                    qqNum: '823631154', 
-                    address: "深圳市南山区",
-
+                    politicId: null,
+                    party: null, 
+                    email: null,
+                    phone: null,
+                    tel: null, 
+                    qqNum: null, 
+                    address: null,
                     departmentId: null,
-                    positionId: 29,
-                    
-                    education: "本科",
-                    speciality: "信息管理与信息系统",
-                    postCode: '524400',
-                    hobby: '乒乓球', 
-                    remark: '描述', 
+                    positionId: null,
+                    education: null,
+                    specialty: null,
+                    postCode: null,
+                    hobby: null, 
+                    remark: null, 
                     position: {
                         id: null
                     }, 
@@ -277,6 +234,7 @@
                         id: null
                     }
                 },
+                // 所属部门的树形信息
                 defaultProps: {
                     children: 'children',
                     label: 'name'
@@ -324,22 +282,10 @@
             }
         },
         mounted() {
-            // this.initEmps();
             this.initData();
-            this.initPositions();
         },
         methods: {
-            // 清除搜索的信息
-            cleanSearchValues() {
-                this.searchValue.positionId = null;
-                this.searchValue.departmentId = null;
-                this.searchValue.cardId = null;
-                this.searchValue.phone = null;
-                this.searchValue.sex = null;
-                this.inputDepName = '所属部门';
-                this.showAdvanceSearchView = !this.showAdvanceSearchView;
-            }, 
-            // 添加用户是重置输入框
+            // 重置添加员工表单
              resetForm(formName) {
                 this.emptyEmp();
                 this.$refs[formName].resetFields();
@@ -378,81 +324,38 @@
                     department: {
                         id: null
                     }
-
-                    // name: "",
-                    // gender: "",
                 }
                 this.inputDepName = '';
             },
             doAddEmp() {
-                // 编辑
-                if (this.emp.id) {
-                    this.$refs['empForm'].validate(valid => {
-                        // alert(JSON.stringify(this.emp));
-                        if (valid) {
-                            this.putRequest("/employee/basic/", this.emp).then(resp => {
-                                if (resp.status === 20000402) {
-                                    // 用户没登录，跳转至登录页面
-                                    this.$router.replace('/');
-                                } else if (resp.status === 200) {
-                                    this.dialogVisible = false;
-                                    this.initEmps();
-                                }
-                                // if (resp) {
-                                //     this.dialogVisible = false;
-                                //     this.initEmps();
-                                // }
-                            })
-                        }
-                    });
                 // 添加
-                } else {
+                if (!this.emp.id) {
                     this.$refs['empForm'].validate(valid => {
                         if (valid) {
-                            // alert(JSON.stringify(this.emp));
                             this.postRequest("/employee/basic/", this.emp).then(resp => {
                                 if (resp.status === 20000402) {
-                                    // window.sessionStorage.removeItem('user');
-                                    // window.localStorage.removeItem('token');
                                     // 用户没登录，跳转至登录页面
                                     this.$router.replace('/');
                                 } else if (resp.status === 200) {
-                                    this.dialogVisible = false;
-                                    this.initEmps();
+                                    this.resetForm('empForm');
                                 }
-                                // if (resp) {
-                                //     this.dialogVisible = false;
-                                //     this.initEmps();
-                                // }
                             })
                         }
                     });
                 }
             },
+            // 选取部门信息
             handleNodeClick(data) {
                 this.inputDepName = data.name;
                 this.emp.department.name = data.name;
                 this.emp.department.id = data.id;
-                this.showAddDepView = !this.showAddDepView
+                this.showAddDepView = !this.showAddDepView;
             },
+            // 所属部门的小窗口
             showDepView() {
                 this.showAddDepView = !this.showAddDepView;
             },
-            showDepView2() {
-                this.showSearchDepView = !this.showSearchDepView
-            },
-            initPositions() {
-                if (!window.sessionStorage.getItem("positions")) {
-                    this.getRequest('/position/basic/').then(resp => {
-                        if (resp) {
-                            this.positions = resp.obj;
-                            window.sessionStorage.setItem("positions", JSON.stringify(resp.obj));
-                        }
-                    })
-                } else {
-                    this.positions = JSON.parse(window.sessionStorage.getItem("positions"));
-                }
-            },
+            // 初始化添加员工所依赖的基础信息
             initData() {
                 // 民族
                 if (!window.sessionStorage.getItem("nations")) {
@@ -487,24 +390,18 @@
                 } else {
                     this.allDeps = JSON.parse(window.sessionStorage.getItem("deps"));
                 }
-            },
-            sizeChange(currentSize) {
-                this.size = currentSize;
-                this.initEmps();
-            },
-            currentChange(currentPage) {
-                this.page = currentPage;
-                this.initEmps();
-            },
-            showAddEmpView() {
-                this.emptyEmp();
-                this.title = '添加员工';
-                this.addAllDeps = this.allDeps;
-                // this.getMaxWordID();
-                this.isEditEmp = true;
-                this.dialogVisible = true;
+                // 职位
+                if (!window.sessionStorage.getItem("positions")) {
+                    this.getRequest('/position/basic/').then(resp => {
+                        if (resp) {
+                            this.positions = resp.obj;
+                            window.sessionStorage.setItem("positions", JSON.stringify(resp.obj));
+                        }
+                    })
+                } else {
+                    this.positions = JSON.parse(window.sessionStorage.getItem("positions"));
+                }
             }
-            
         }
     }
 </script>

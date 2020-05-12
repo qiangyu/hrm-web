@@ -45,20 +45,20 @@
                         prop="remark"
                         label="文件描述"
                         align="left"
-                        width="200">
+                        width="150">
                 </el-table-column>
                 <el-table-column
                         prop="fileName"
                         label="文件名称"
                         align="left"
-                        width="150">
+                        width="200">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                         prop="filePath"
                         label="文件路径"
                         align="left"
                         width="150">
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                         prop="fileType"
                         label="文件类型"
@@ -68,7 +68,7 @@
                 <el-table-column
                         prop="fileSize"
                         label="文件大小(字节)"
-                        width="120"
+                        width="100"
                         align="left">
                 </el-table-column>
                 <el-table-column
@@ -100,6 +100,8 @@
                         background
                         @current-change="currentChange"
                         @size-change="sizeChange"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="5"
                         layout="sizes, prev, pager, next, jumper, ->, total, slot"
                         :total="total">
                 </el-pagination>
@@ -199,7 +201,7 @@
                 total: 0,
                 page: 1,
                 keyword: '',
-                size: 10,
+                size: 5,
                 editDocument: {
                     id: null,  
                     title: '', 
@@ -246,6 +248,16 @@
                         loginname: ''
                     }
                 }
+            },
+            // 行数的改变
+            sizeChange(currentSize) {
+                this.size = currentSize;
+                this.initDocuments();
+            },
+            // 页数的改变
+            currentChange(currentPage) {
+                this.page = currentPage;
+                this.initDocuments();
             },
             // 编辑
             showEditDocuView(data) {

@@ -1,37 +1,37 @@
 <template>
     <div>
-        <div style="margin-bottom: 10px;"  >
-            <el-input
-                    :disabled="!power"
-                    size="small"
-                    class="addPosInput"
-                    v-loading="loading"
-                    element-loading-text="正在加载..."
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.8)"
-                    placeholder="填写职位名称..."
-                    prefix-icon="el-icon-plus"
-                    @keydown.enter.native="addPosition"
-                    v-model="pos.name">
-            </el-input>
-        </div>
-        <div>
-            <el-input
-                    :disabled="!power"
-                    size="small"
-                    class="addPosInput"
-                    v-loading="loading"
-                    element-loading-text="正在加载..."
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.8)"
-                    placeholder="填写职位描述..."
-                    prefix-icon="el-icon-plus"
-                    @keydown.enter.native="addPosition"
-                    v-model="pos.remark"
-                    style="margin-right: 20px;">
-            </el-input>
-        
-        <el-button :disabled="!power" icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
+        <div style="display: flex; justify-content: space-between; margin: 30px 10px;">
+            <div style="border: 2px solid skyblue; padding: 20px; width: 50%;">
+                <el-input
+                        :disabled="!power"
+                        size="small"
+                        class="addPosInput"
+                        v-loading="loading"
+                        element-loading-text="正在加载..."
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(0, 0, 0, 0.8)"
+                        placeholder="填写职位名称..."
+                        prefix-icon="el-icon-plus"
+                        @keydown.enter.native="addPosition"
+                        v-model="pos.name">
+                </el-input>
+                <el-input
+                        :disabled="!power"
+                        size="small"
+                        class="addPosInput"
+                        v-loading="loading"
+                        element-loading-text="正在加载..."
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(0, 0, 0, 0.8)"
+                        placeholder="填写职位描述..."
+                        prefix-icon="el-icon-plus"
+                        @keydown.enter.native="addPosition"
+                        v-model="pos.remark"
+                        style="margin-right: 20px;">
+                </el-input>
+            
+                <el-button :disabled="!power" icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
+            </div>
         </div>
         <!-- <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p> -->
     </div>
@@ -74,15 +74,6 @@
 <style>
     .addPosInput {
         width: 300px;
-        margin-right: 8px
-    }
-
-    .updatePosInput {
-        width: 200px;
-        margin-left: 8px;
-    }
-
-    .posManaMain {
-        margin-top: 10px;
+        margin-right: 30px
     }
 </style>
