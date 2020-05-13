@@ -3,7 +3,7 @@ let proxyObj = {};
 //     ws: true,
 //     target: "ws://localhost:8081"
 // };
-// 本地环境
+// 后端url
 proxyObj['/'] = {
     ws: false,
     target: 'http://localhost:8081',

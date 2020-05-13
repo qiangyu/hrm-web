@@ -136,10 +136,13 @@
                         label="操作"
                         width="190">
                     <template slot-scope="scope">
-                        <el-button :disabled="loginUserId !== scope.row.id || (power === 1 && scope.row.status === 3 && !(power !== 2 && scope.row.status !== 2))" @click="showUpdateUserInfoView(scope.row)" style="padding: 3px; margin-left: 2px" size="mini">编辑信息</el-button>
-                        <el-button :disabled="loginUserId !== scope.row.id || (power === 1 && scope.row.status === 3 && !(power !== 2 && scope.row.status !== 2))" @click="showUpdatePasswdView(scope.row)" style="padding: 3px" size="mini" type="primary">修改密码</el-button>
-                        <el-button :disabled="loginUserId !== scope.row.id || (power === 1 && scope.row.status === 3 && !(power !== 2 && scope.row.status !== 2))" @click="deleteUser(scope.row)" style="padding: 3px" size="mini" type="danger">删除</el-button>
-                        <!-- <p v-if="loginUserId !== scope.row.id && (power === 1 || scope.row.status === 3 || (power === 2 && scope.row.status === 2))" style="color: red; text-align: center;">权限不足，无法操作</p> -->
+                        <!-- :disabled="false" 默认值是false，不禁用的。若值为true，则为禁用状态 
+                                !(loginUserId === scope.row.id) && !(power === 2 && power > scope.row.status) && !(power === 3)
+                                   用户id相同，表示是同一个用户       登陆用户是管理员（2），并且这行用户的权限不高于管理员  权限为开发者（3）不禁用  ---》  然后全部取反
+                        -->
+                        <el-button :disabled="!(loginUserId === scope.row.id) && !(power === 2 && power > scope.row.status) && !(power === 3)" @click="showUpdateUserInfoView(scope.row)" style="padding: 3px; margin-left: 2px" size="mini">编辑信息</el-button>
+                        <el-button :disabled="!(loginUserId === scope.row.id) && !(power === 2 && power > scope.row.status) && !(power === 3)" @click="showUpdatePasswdView(scope.row)" style="padding: 3px" size="mini" type="primary">修改密码</el-button>
+                        <el-button :disabled="!(loginUserId === scope.row.id) && !(power === 2 && power > scope.row.status) && !(power === 3)" @click="deleteUser(scope.row)" style="padding: 3px" size="mini" type="danger">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -647,8 +650,6 @@
                 this.getRequest(url).then(resp => {
                     this.loading = false;
                     if (resp.status === 20000402) {
-                        // window.sessionStorage.removeItem('user');
-                        // window.localStorage.removeItem('token');
                         // 用户没登录，跳转至登录页面
                         this.$router.replace('/');
                     } else if (resp.status === 200) {
