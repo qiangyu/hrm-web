@@ -1,16 +1,23 @@
-# xiaoyu-web
-人力资源管理系统<br/>
-项目技术栈<br/>
-&ensp;&ensp;<a href="https://github.com/itqiangyu/xiaoyu-hrm.git">后端技术栈</a><br/>
-    &ensp;&ensp;&ensp;&ensp;1. Spring Boot<br/>
-    &ensp;&ensp;&ensp;&ensp;2. MyBatis<br/>
-    &ensp;&ensp;&ensp;&ensp;3. redis<br/>
-    &ensp;&ensp;&ensp;&ensp;3. MySQL<br/>
-<br/>
-&ensp;<a href="https://github.com/itqiangyu/hrm-web.git">前端技术栈</a>（引用微人事的页面）<br/>
-    &ensp;&ensp;&ensp;&ensp;1. Vue<br/>
-    &ensp;&ensp;&ensp;&ensp;2. ElementUI<br/>
-    &ensp;&ensp;&ensp;&ensp;3. axios<br/>
-    &ensp;&ensp;&ensp;&ensp;4. vue-router<br/>
-    &ensp;&ensp;&ensp;&ensp;5. Vuex<br/>
-    &ensp;&ensp;&ensp;&ensp;6. vue-cli4<br/>
+# xiaoyu-hrm
+#### 人力资源管理系统
+#### 项目演示：[点击跳转](http://47.106.99.53:8082/)
+- ![hrm-登录页面](https://github.com/itqiangyu/xiaoyu-hrm/blob/master/images/hrm_index.png)
+- ![hrm-首页](https://github.com/itqiangyu/xiaoyu-hrm/blob/master/images/hrm_home.png)
+- ![hrm-管理用户模块](https://github.com/itqiangyu/xiaoyu-hrm/blob/master/images/hrm_userBasic.png)
+- ![hrm-添加用户模块](https://github.com/itqiangyu/xiaoyu-hrm/blob/master/images/hrm_userAdd.png)
+
+#### 项目技术栈
+
+#### [后端技术栈](https://github.com/itqiangyu/xiaoyu-hrm.git)
+- Spring Boot
+- MyBatis
+- redis
+- MySQL
+
+##### [前端技术栈](https://github.com/itqiangyu/hrm-web.git)（引用微人事的页面）
+- Vue
+- ElementUI
+- axios
+- vue-router
+- Vuex
+- vue-cli4
