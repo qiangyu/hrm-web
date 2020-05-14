@@ -135,7 +135,7 @@
                         align="left"
                         label="操作"
                         width="190">
-                    <template slot-scope="scope">
+                    <template slot-scope="scope"  fixed="right">
                         <!-- :disabled="false" 默认值是false，不禁用的。若值为true，则为禁用状态 
                                 !(loginUserId === scope.row.id) && !(power === 2 && power > scope.row.status) && !(power === 3)
                                    用户id相同，表示是同一个用户       登陆用户是管理员（2），并且这行用户的权限不高于管理员  权限为开发者（3）不禁用  ---》  然后全部取反

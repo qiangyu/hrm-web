@@ -278,7 +278,7 @@
                 //         // that.initDocuments();
                 //     }
                 // })
-                window.location.href="/document/basic/download/?fileName=" + data.fileName;
+                window.location.href="/document/basic/download/?token=" + window.localStorage.getItem('token') + "&fileName=" + data.fileName;
                 // window.opener("/document/basic/download/?fileName=" + data.fileName);
             }, 
             deleteEmp(data) {

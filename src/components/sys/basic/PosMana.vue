@@ -17,7 +17,7 @@
                     @selection-change="handleSelectionChange"
                     size="small"
                     stripe
-                    style="width: 70%">
+                    style="width: 100%">
                 <el-table-column
                         type="selection"
                         width="50">
@@ -50,7 +50,7 @@
                         <el-tag size="small" type="danger" v-else>未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                                 size="mini"
