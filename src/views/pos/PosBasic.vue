@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-tabs v-model="activeName" type="card">
+        <el-tabs v-model="activeName" type="card" style="min-width: 500px;">
             <el-tab-pane label="职位管理" name="posmana"><PosMana></PosMana></el-tab-pane>
         </el-tabs>
     </div>

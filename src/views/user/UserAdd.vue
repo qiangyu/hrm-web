@@ -1,15 +1,16 @@
 <template>
-    <div style="display: flex; justify-content: space-between; margin: 30px 10px;">
-        <div style="border: 2px solid skyblue; padding: 20px; margin: 0 auto; width: 80%;">
+    <!-- <div style="display: flex; justify-content: space-between; margin: 30px 10px;"> -->
+    <div style="display: flex; margin: 30px 10px;">
+        <div style="border: 2px solid skyblue; padding: 20px; width: 30%; min-width: 395px;">
             <el-form :model="newUser" :rules="rules" ref="newUser" :disabled="!power">
-                <el-row style="text-align: center;">
-                    <el-col :span="4">
-                        <el-form-item label="用户名:" prop="username">
-                            <el-input size="small " maxlength="10" style="width: 140px" prefix-icon="el-icon-edit" v-model="newUser.username"
+                <el-row>
+                    <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
+                        <el-form-item label="用户名称:" prop="username">
+                            <el-input size="small " maxlength="10" style="min-width: 150px" prefix-icon="el-icon-edit" v-model="newUser.username"
                                     placeholder="请输入用户名"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="5">
+                    <!-- <el-col :span="5">
                         <el-form-item label="用户账号:" prop="loginname">
                             <el-input size="small " maxlength="16" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.loginname"
                                     placeholder="请输入用户账号" :disabled="isEditUser"></el-input>
@@ -34,11 +35,50 @@
                                 <el-radio label="2">管理员</el-radio>
                             </el-radio-group>
                         </el-form-item>
+                    </el-col> -->
+                </el-row>
+
+                <el-row>
+                    <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
+                        <el-form-item label="用户账号:" prop="loginname">
+                            <el-input size="small " maxlength="16" style="min-width: 150px" prefix-icon="el-icon-edit" v-model="newUser.loginname"
+                                    placeholder="请输入用户账号" :disabled="isEditUser"></el-input>
+                        </el-form-item>
                     </el-col>
                 </el-row>
+
+                <el-row>
+                    <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
+                        <el-form-item label="账号密码:" prop="password">
+                            <el-input type="password" size="small " maxlength="32" style="min-width: 150px" prefix-icon="el-icon-edit" v-model="newUser.password"
+                                    placeholder="请输入密码"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
+                        <el-form-item label="确认密码:" prop="checkPassword">
+                            <el-input type="password" size="small " maxlength="32" style="min-width: 150px" prefix-icon="el-icon-edit" v-model="newUser.checkPassword"
+                                    placeholder="请确认密码"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="5" style="min-width: 260px;">
+                        <el-form-item label="用户状态:" prop="status">
+                            <el-radio-group v-model="newUser.status">
+                                <el-radio label="1">普通用户</el-radio>
+                                <el-radio label="2">管理员</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
             </el-form>
         </div>
-        <span slot="footer" class="dialog-footer" style="margin-top: 30px">
+        <span slot="footer" class="dialog-footer" style="margin: 30px; min-width: 126px;">
             <el-button :disabled="!power" @click="resetForm('newUser')">重置</el-button>
             <el-button :disabled="!power" type="primary" @click="doAddUser">确 定</el-button>
         </span>
@@ -109,12 +149,9 @@
                         message: '密码由字母数字组成6-16位！', 
                         trigger: 'blur'
                     }],
-                    checkPassword: [
-                        { validator: checkPasswordFun, trigger: 'blur' }
-                    ], 
-                    status: [
-                        { validator: powerFun, trigger: 'blur' }
-                    ]
+                    checkPassword: [{ required: true, validator: checkPasswordFun, trigger: 'blur' }], 
+
+                    status: [{ required: true, validator: powerFun, trigger: 'blur' }]
                 }
             }
         },

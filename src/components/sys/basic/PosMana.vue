@@ -4,7 +4,7 @@
             <el-input placeholder="请输入职位名称进行模糊搜索，可以直接回车搜索..." prefix-icon="el-icon-search"
                         clearable
                         @clear="initPositions"
-                        style="width: 380px;margin-right: 10px" v-model="keyword"
+                        style="width: 380px; margin-right: 10px" v-model="keyword"
                         @keydown.enter.native="initPositions"></el-input>
             <el-button icon="el-icon-search" type="primary" @click="initPositions">
                 搜索
@@ -50,7 +50,7 @@
                         <el-tag size="small" type="danger" v-else>未启用</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" fixed="right">
+                <el-table-column label="操作" align="left" width="145">
                     <template slot-scope="scope">
                         <el-button
                                 size="mini"
@@ -63,7 +63,6 @@
                                 @click="handleDelete(scope.$index, scope.row)"
                                 :disabled="!power">删除
                         </el-button>
-                        <!-- <p v-if="!power">权限不足，无法操作</p> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -94,9 +93,9 @@
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-    <el-button size="small" @click="dialogVisible = false">取 消</el-button>
-    <el-button size="small" type="primary" @click="doUpdate">确 定</el-button>
-  </span>
+                <el-button size="small" @click="dialogVisible = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="doUpdate">确 定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>

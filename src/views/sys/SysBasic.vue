@@ -1,20 +1,18 @@
 <template>
     <div>
         <div>
-            <div style="display: flex;justify-content: space-between">
-                <div>
-                    <el-input placeholder="请输入文件标题进行搜索，可以直接回车搜索..." prefix-icon="el-icon-search"
-                              clearable
-                              @clear="initDocuments"
-                              style="width: 380px;margin-right: 10px" v-model="searchValue.title"
-                              @keydown.enter.native="initDocuments" :disabled="showAdvanceSearchView"></el-input>
-                    <el-button icon="el-icon-search" type="primary" @click="initDocuments" :disabled="showAdvanceSearchView">
-                        搜索
-                    </el-button>
-                </div>
+            <div style="display: flex; min-width: 530px;">
+                <el-input placeholder="请输入文件标题进行搜索，可以直接回车搜索..." prefix-icon="el-icon-search"
+                            clearable
+                            @clear="initDocuments"
+                            style="width: 380px;margin-right: 10px" v-model="searchValue.title"
+                            @keydown.enter.native="initDocuments" :disabled="showAdvanceSearchView"></el-input>
+                <el-button icon="el-icon-search" type="primary" @click="initDocuments" :disabled="showAdvanceSearchView">
+                    搜索
+                </el-button>
             </div>
         </div>
-        <div style="margin-top: 10px">
+        <div style="margin-top: 10px; min-width: 600px;">
             <el-table
                     :data="documents"
                     :model="power" 
@@ -24,7 +22,7 @@
                     element-loading-text="正在加载..."
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(0, 0, 0, 0.8)"
-                    style="width: 100%">
+                    style="width: 100%;">
                 <el-table-column
                         type="selection"
                         width="50">
@@ -95,7 +93,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <div style="display: flex;justify-content: flex-end">
+            <div style="display: flex; justify-content: flex-end; min-width: 600px;">
                 <el-pagination
                         background
                         @current-change="currentChange"

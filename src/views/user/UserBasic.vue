@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <div style="display: flex;justify-content: space-between">
+            <div style="display: flex;justify-content: space-between; min-width: 750px;">
                 <div>
                     <el-input placeholder="请输入用户名进行搜索，可以直接回车搜索..." prefix-icon="el-icon-search"
                               clearable
@@ -40,7 +40,7 @@
             </div>
             <transition name="slide-fade">
                 <div v-show="showAdvanceSearchView"
-                     style="border: 1px solid #409eff;border-radius: 5px;box-sizing: border-box;padding: 5px;margin: 10px 0px;">
+                     style="border: 1px solid #409eff; border-radius: 5px; box-sizing: border-box; padding: 5px; margin: 10px 0px; min-width: 750px;">
                     <el-row>
                         <!-- <el-col :span="5" style="margin: 10px">
                             用户账号:
@@ -55,10 +55,10 @@
                                 </el-option>
                             </el-select>
                         </el-col> -->
-                        <el-col :span="4" style="margin: 10px">
+                        <el-col  style="margin: 10px">
                             用户状态:
                             <el-select v-model="searchValue.status" placeholder="用户状态" size="mini"
-                                       style="width: 130px;">
+                                       style="width: 130px; margin-right: 50px;">
                                 <el-option
                                         v-for = "user in userStatus"
                                         :key = "user"
@@ -66,10 +66,7 @@
                                         :value = "user">
                                 </el-option>
                             </el-select>
-                        </el-col>
-                        
-                        <el-col :span="5" :offset="1" style="margin: 10px">
-                            <el-button type="primary" @click="cleanSearchValues()">
+                            <el-button type="primary" size="mini" @click="cleanSearchValues()">
                                 <i :class="showAdvanceSearchView?'fa fa-angle-double-up':'fa fa-angle-double-down'"
                                 aria-hidden="true"></i>
                                 取消
@@ -80,7 +77,7 @@
                 </div>
             </transition>
         </div>
-        <div style="margin-top: 10px">
+        <div style="margin-top: 10px; min-width: 750px;">
             <el-table
                     :data="users"
                     :model="power" 
@@ -146,7 +143,9 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <div style="display: flex;justify-content: flex-end">
+            
+        </div>
+        <div style="display: flex;justify-content: flex-end; min-width: 750px;">
                 <el-pagination
                         background
                         @current-change="currentChange"
@@ -157,7 +156,6 @@
                         :total="total">
                 </el-pagination>
             </div>
-        </div>
         <!-- 新增用户弹窗 -->
         <el-dialog
                 :title="title"

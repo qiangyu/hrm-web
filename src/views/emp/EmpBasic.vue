@@ -1,7 +1,8 @@
 <template>
     <div>
         <div>
-            <div style="display: flex;justify-content: space-between">
+            <!-- <div style="display: flex;justify-content: space-between;"> -->
+            <div style="display: flex; justify-content: space-between; min-width: 700px;">
                 <div>
                     <el-input placeholder="请输入员工名进行搜索，可以直接回车搜索..." prefix-icon="el-icon-search"
                               clearable
@@ -40,12 +41,11 @@
             </div>
             <transition name="slide-fade">
                 <div v-show="showAdvanceSearchView"
-                     style="border: 1px solid #409eff;border-radius: 5px;box-sizing: border-box;padding: 5px;margin: 10px 0px;">
+                     style="border: 1px solid #409eff;border-radius: 5px;box-sizing: border-box;padding: 5px;margin: 10px 0px; min-width: 740px;">
                     <el-row>
-                        
-                        <el-col :span="4">
+                        <el-col >
                             职位:
-                            <el-select v-model="searchValue.positionId" placeholder="职位" size="mini" style="width: 130px;">
+                            <el-select v-model="searchValue.positionId" placeholder="职位" size="mini" style="width: 130px; margin-right: 20px;">
                                 <el-option
                                         v-for="item in positions"
                                         :key="item.id"
@@ -53,34 +53,30 @@
                                         :value="item.id">
                                 </el-option>
                             </el-select>
-                        </el-col>
-                        <el-col :span="6">
                             身份证号码:
-                            <el-input placeholder="请输入身份证号码进行搜索..." prefix-icon="el-icon-search"
+                            <el-input placeholder="身份证号码进行搜索..." prefix-icon="el-icon-search"
                               clearable
-                              style="width: 300px;margin-right: 10px" v-model="searchValue.cardId"></el-input>
-                        </el-col>
-                        <el-col :span="5">
-                            手机号码:
-                            <el-input placeholder="请输入身份证号码进行搜索..." prefix-icon="el-icon-search"
-                              clearable
-                              style="width: 200px;margin-right: 10px" v-model="searchValue.phone"></el-input>
-                        </el-col>
-                        <el-col :span="7">
+                              style="width: 250px; margin-right: 20px;" v-model="searchValue.cardId"></el-input>
                             性别：
-                            <el-radio-group v-model="searchValue.sex">
+                            <el-radio-group v-model="searchValue.sex" style="margin-right: 10px;">
                                 <el-radio label="1">男</el-radio>
                                 <el-radio label="0">女</el-radio>
                             </el-radio-group>
+                            
                         </el-col>
                     </el-row>
                     <el-row style="margin-top: 10px">
-                        <el-col :span="4">
+                        <el-col>
+                            手机号码:
+                            <el-input placeholder="手机号码进行搜索..." prefix-icon="el-icon-search"
+                              clearable
+                              style="width: 200px; margin-right: 20px;" v-model="searchValue.phone"></el-input>
                             所属部门:
                             <el-popover
                                     placement="right"
                                     title="请选择部门"
                                     width="200"
+                                    style="margin-right: 40px;"
                                     trigger="manual"
                                     v-model="showSearchDepView">
                                 <el-tree default-expand-all :data="allDeps" :props="defaultProps"
@@ -90,9 +86,6 @@
                                      @click="showDepView2">{{inputDepName}}
                                 </div>
                             </el-popover>
-                        </el-col>
-                        <el-col :span="5" :offset="4">
-                            <!-- <el-button size="mini">取消</el-button> -->
                             <el-button type="primary" @click="showAdvanceSearchView = !showAdvanceSearchView">
                                 <i :class="showAdvanceSearchView?'fa fa-angle-double-up':'fa fa-angle-double-down'"
                                 aria-hidden="true" @click="showAdvanceSearchView()"></i>
@@ -104,7 +97,7 @@
                 </div>
             </transition>
         </div>
-        <div style="margin-top: 10px">
+        <div style="margin-top: 10px; min-width: 700px;">
             <el-table
                     :data="emps"
                     stripe
@@ -117,14 +110,14 @@
                     style="width: 100%">
                 <el-table-column
                         type="selection"
-                        width="50">
+                        width="40">
                 </el-table-column>
                 <el-table-column
                         prop="name"
                         fixed
                         align="left"
                         label="姓名"
-                        width="90">
+                        width="70">
                 </el-table-column>
                 <el-table-column
                         prop="sex"
@@ -231,13 +224,12 @@
                 </el-table-column>
                 <el-table-column
                         fixed="right"
-                        width="150"
+                        width="100"
                         label="操作">
                     <template slot-scope="scope">
                         <el-button :disabled="!power" @click="showEditEmpView(scope.row)" style="padding: 3px" size="mini">编辑</el-button>
                         <!-- <el-button style="padding: 3px" size="mini" type="primary">查看高级资料</el-button> -->
-                        <el-button :disabled="!power" @click="deleteEmp(scope.row)" style="padding: 3px" size="mini" type="danger">删除
-                        </el-button>
+                        <el-button :disabled="!power" @click="deleteEmp(scope.row)" style="padding: 3px" size="mini" type="danger">删除</el-button>
                         <!-- <p v-if="!power" style="color: red;">权限不足，无法操作</p> -->
                     </template>
                 </el-table-column>
@@ -245,7 +237,7 @@
             <el-button @click="deleteMany" type="danger" size="small" style="margin-top: 8px"
                        :disabled="multipleSelection.length == 0 || !power">批量删除
             </el-button>
-            <div style="display: flex;justify-content: flex-end">
+            <div style="display: flex;justify-content: flex-end; min-width: 700px;">
                 <el-pagination
                         background
                         @current-change="currentChange"

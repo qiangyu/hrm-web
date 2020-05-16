@@ -1,39 +1,43 @@
 <template>
-    <div>
-        <div style="display: flex; justify-content: space-between; margin: 30px 10px;">
-            <div style="border: 2px solid skyblue; padding: 20px; width: 50%;">
+    <!-- <div style="display: flex; justify-content: space-between; margin: 30px 10px;"> -->
+    <div style="display: flex; margin: 30px 10px;">
+        <div style="border: 2px solid skyblue; padding: 20px; width: 20%; min-width: 350px;">
+
+            <el-row style="margin-bottom: 20px;">
                 <el-input
-                        :disabled="!power"
-                        size="small"
-                        class="addPosInput"
-                        v-loading="loading"
-                        element-loading-text="正在加载..."
-                        element-loading-spinner="el-icon-loading"
-                        element-loading-background="rgba(0, 0, 0, 0.8)"
-                        placeholder="填写职位名称..."
-                        prefix-icon="el-icon-plus"
-                        @keydown.enter.native="addPosition"
-                        v-model="pos.name">
-                </el-input>
+                    :disabled="!power"
+                    size="small"
+                    class="addPosInput"
+                    v-loading="loading"
+                    element-loading-text="正在加载..."
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)"
+                    placeholder="填写职位名称..."
+                    prefix-icon="el-icon-plus"
+                    @keydown.enter.native="addPosition"
+                    v-model="pos.name">
+            </el-input>
+            </el-row>
+
+            <el-row style="margin-bottom: 20px;">
                 <el-input
-                        :disabled="!power"
-                        size="small"
-                        class="addPosInput"
-                        v-loading="loading"
-                        element-loading-text="正在加载..."
-                        element-loading-spinner="el-icon-loading"
-                        element-loading-background="rgba(0, 0, 0, 0.8)"
-                        placeholder="填写职位描述..."
-                        prefix-icon="el-icon-plus"
-                        @keydown.enter.native="addPosition"
-                        v-model="pos.remark"
-                        style="margin-right: 20px;">
-                </el-input>
-            
-                <el-button :disabled="!power" icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
-            </div>
+                    :disabled="!power"
+                    size="small"
+                    class="addPosInput"
+                    v-loading="loading"
+                    element-loading-text="正在加载..."
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)"
+                    placeholder="填写职位描述..."
+                    prefix-icon="el-icon-plus"
+                    @keydown.enter.native="addPosition"
+                    v-model="pos.remark"
+                    style="margin-right: 20px;">
+            </el-input>
+            </el-row>
+        
+            <el-button :disabled="!power" icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
         </div>
-        <!-- <p v-if="!power" style="font-size: 20px; color: red;">权限不足，无法操作</p> -->
     </div>
 </template>
 

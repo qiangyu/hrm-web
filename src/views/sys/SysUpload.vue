@@ -1,6 +1,6 @@
 <template>
     <div style="display: flex; justify-content: space-between; margin: 30px 10px;">
-        <div style="border: 2px solid skyblue; padding: 20px; width: 30%;">
+        <div style="border: 2px solid skyblue; padding: 20px; width: 30%; min-width: 432px;">
             <el-form :model="documentContent" :rules="rules" ref="documentContent">
                 <el-form-item label="文档标题:" prop="title">
                     <el-input
@@ -21,27 +21,25 @@
                         show-word-limit
                         style="font-size: 20px"></el-input>
                 </el-form-item>
-                <div>
-                    <el-form-item label="文档内容:" prop="content">
-                        <el-upload
-                            class="upload"
-                            drag
-                            :action="uploadFileUrl"
-                            :before-upload="beforeUpload"
-                            :auto-upload="false"
-                            :on-success="uploadSuccess"
-                            :on-change="changeFile"
-                            :on-error="uploadError"
-                            :data="documentData"
-                            ref="upload"
-                            :headers="myHeader"
-                            limit=1>
-                            <i class="el-icon-upload"></i>
-                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                            <div class="el-upload__tip" slot="tip">每次只能上传单个文件，且不超过10MB</div>
-                        </el-upload>
-                    </el-form-item>
-                </div>
+                <el-form-item label="文档内容:" prop="content">
+                    <el-upload
+                        class="upload"
+                        drag
+                        :action="uploadFileUrl"
+                        :before-upload="beforeUpload"
+                        :auto-upload="false"
+                        :on-success="uploadSuccess"
+                        :on-change="changeFile"
+                        :on-error="uploadError"
+                        :data="documentData"
+                        ref="upload"
+                        :headers="myHeader"
+                        limit=1>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">每次只能上传单个文件，且不超过10MB</div>
+                    </el-upload>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer" style="margin-left: 25%;">
                 <el-button @click="cancel">取 消</el-button>
@@ -67,8 +65,8 @@ export default {
                 uploadFileUrl: '/document/basic/',
                 isHaveFile: false, 
                 rules: {
-                    title: [{required: true, message: '请输入文档标题！', trigger: 'blur'}],
-                    remark: [{required: true, message: '请输入文档描述！', trigger: 'blur'}], 
+                    title: [{ message: '请输入文档标题！', trigger: 'blur'}],
+                    remark: [{ message: '请输入文档描述！', trigger: 'blur'}], 
                 }
             }
         }, 

@@ -18,11 +18,16 @@
                 </div>
             </el-header>
             <el-container>
-                <el-aside width="200px">
-                    <el-menu router unique-opened>
+                <!-- 这里如果不将超出盒子部分隐藏（overflow: hidden;），会出现个问题。。可能是：el-menu-item 标签默认是200px，如果这个盒子小于200px，则会出现滚动条... -->
+                <el-aside width="8%" style="height: 600px; margin-top: 10px; min-width: 130px; overflow: hidden;">
+                    <el-radio-group v-model="isCollapse" style="margin-left: 10px; margin-bottom: 10px;">
+                        <el-radio-button :label="false">展开</el-radio-button>
+                        <el-radio-button :label="true">收起</el-radio-button>
+                    </el-radio-group>
+                    <el-menu router unique-opened :collapse="isCollapse">
                         <el-submenu :index="index+''" v-for="(item,index) in routes" v-if="!item.hidden" :key="index">
                             <template slot="title">
-                                <i style="color: #409eff;margin-right: 5px" :class="item.iconCls"></i>
+                                <i style="color: #409eff; margin-right: 5px;" :class="item.iconCls"></i>
                                 <span>{{item.name}}</span>
                             </template>
                             <el-menu-item :index="child.path" v-for="(child,indexj) in item.children" :key="indexj">
@@ -55,6 +60,7 @@
         data() {
             return {
                 // user: JSON.parse(window.sessionStorage.getItem("user"))
+                isCollapse: false
             }
         },
         computed: {

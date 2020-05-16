@@ -1,7 +1,9 @@
 <template>
     <div>
-        <el-tabs v-model="activeName" type="card">
-            <el-tab-pane label="部门管理" name="depmana"><DepMana></DepMana></el-tab-pane>
+        <el-tabs v-model="activeName" type="card" style="min-width: 400px;">
+            <el-tab-pane label="部门管理" name="depmana">
+                <DepMana></DepMana>
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>

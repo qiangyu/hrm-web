@@ -1,11 +1,10 @@
 <template>
-    <div style="width: 500px;">
+    <div style="width: 30%; min-width: 350px;">
         <el-input
                 placeholder="请输入部门名称进行搜索..."
                 prefix-icon="el-icon-search"
                 v-model="filterText">
         </el-input>
-
         <el-tree
                 :data="deps"
                 :props="defaultProps"
