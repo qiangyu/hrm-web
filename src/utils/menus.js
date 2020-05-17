@@ -16,14 +16,6 @@ export const initMenu = (router, store) => {
             store.commit('initRoutes', fmtRoutes);
             store.dispatch('connect');
         }
-        // if (data) {
-        //     // alert(JSON.stringify(data));
-        //     console.log(data);
-        //     let fmtRoutes = formatRoutes(data);
-        //     router.addRoutes(fmtRoutes);
-        //     store.commit('initRoutes', fmtRoutes);
-        //     store.dispatch('connect');
-        // }
     })
 }
 export const formatRoutes = (routes) => {

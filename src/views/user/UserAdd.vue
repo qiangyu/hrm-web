@@ -1,7 +1,7 @@
 <template>
     <!-- <div style="display: flex; justify-content: space-between; margin: 30px 10px;"> -->
-    <div style="display: flex; margin: 30px 10px;">
-        <div style="border: 2px solid skyblue; padding: 20px; width: 30%; min-width: 395px;">
+    <div style="margin: 30px 10px;">
+        <div style="border: 2px solid skyblue; padding: 20px; width: 340px;">
             <el-form :model="newUser" :rules="rules" ref="newUser" :disabled="!power">
                 <el-row>
                     <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
@@ -10,34 +10,7 @@
                                     placeholder="请输入用户名"></el-input>
                         </el-form-item>
                     </el-col>
-                    <!-- <el-col :span="5">
-                        <el-form-item label="用户账号:" prop="loginname">
-                            <el-input size="small " maxlength="16" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.loginname"
-                                    placeholder="请输入用户账号" :disabled="isEditUser"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-form-item label="密码:" prop="password">
-                            <el-input type="password" size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.password"
-                                    placeholder="请输入密码"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="5">
-                        <el-form-item label="确认密码:" prop="checkPassword">
-                            <el-input type="password" size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.checkPassword"
-                                    placeholder="请确认密码"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                        <el-form-item label="用户状态:" prop="status">
-                            <el-radio-group v-model="newUser.status">
-                                <el-radio label="1">普通用户</el-radio>
-                                <el-radio label="2">管理员</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                    </el-col> -->
                 </el-row>
-
                 <el-row>
                     <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
                         <el-form-item label="用户账号:" prop="loginname">
@@ -46,7 +19,6 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-
                 <el-row>
                     <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
                         <el-form-item label="账号密码:" prop="password">
@@ -55,7 +27,6 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-
                 <el-row>
                     <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
                         <el-form-item label="确认密码:" prop="checkPassword">
@@ -64,7 +35,6 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-
                 <el-row>
                     <el-col :span="5" style="min-width: 260px;">
                         <el-form-item label="用户状态:" prop="status">
@@ -75,13 +45,12 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-
             </el-form>
+            <span slot="footer" class="dialog-footer" style="float: right; min-width: 126px;">
+                <el-button :disabled="!power" @click="resetForm('newUser')">重置</el-button>
+                <el-button :disabled="!power" type="primary" @click="doAddUser">确 定</el-button>
+            </span>
         </div>
-        <span slot="footer" class="dialog-footer" style="margin: 30px; min-width: 126px;">
-            <el-button :disabled="!power" @click="resetForm('newUser')">重置</el-button>
-            <el-button :disabled="!power" type="primary" @click="doAddUser">确 定</el-button>
-        </span>
     </div>
 </template>
 

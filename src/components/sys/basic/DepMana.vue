@@ -38,7 +38,7 @@
         <el-dialog
                 title="添加部门"
                 :visible.sync="dialogVisible"
-                width="30%">
+                width="360px">
             <div>
                 <table>
                     <tr>
@@ -138,6 +138,8 @@
                         this.dialogVisible = false;
                         //初始化变量
                         this.initDep();
+                        // 删除操作,移除session里面得部门信息,不然缓存的存在会导致在添加或修改员工时依赖的部门信息不能及时的更新
+                        window.sessionStorage.removeItem('department');
                     }
                 })
             },
@@ -171,6 +173,8 @@
                                     this.$router.replace('/');
                                 } else if (resp.status === 200) {
                                     this.removeDepFromDeps(null,this.deps,data.id);
+                                    // 删除操作,移除session里面得部门信息,不然缓存的存在会导致在添加或修改员工时依赖的部门信息不能及时的更新
+                                    window.sessionStorage.removeItem('department');
                                 }
                             })
                         }

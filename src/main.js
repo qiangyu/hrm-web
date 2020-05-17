@@ -25,25 +25,22 @@ Vue.use(ElementUI,{size:'small'});
 
 router.beforeEach((to, from, next) => {
     if (to.path === '/' || to.path === '/index.html') {
-        // alert(window.sessionStorage.getItem('user'));
-        // 访问首页先注销
-        // let token = window.localStorage.getItem('token');
-        // let url = '/user/logout?token=' + token;
+        // 访问首页，如果是登陆状态，先注销
         if (window.localStorage.getItem('token') && window.sessionStorage.getItem('user')) {
             getRequest('/user/logout');
         }
-        // store.commit('initRoutes', []);
         // 接着删除本地的token以及session的用户信息
         window.localStorage.removeItem('token');
         window.sessionStorage.removeItem('user');
+        // 部门信息和职位信息在对应模块操作增删改时会删除session里的信息
         // 移除民族
-        window.sessionStorage.removeItem('nations');
+        // window.sessionStorage.removeItem('nations');
         // 移除部门
-        window.sessionStorage.removeItem('deps');
+        // window.sessionStorage.removeItem('department');
         // 移除职位
-        window.sessionStorage.removeItem('positions');
+        // window.sessionStorage.removeItem('positions');
         // 移除政治面貌
-        window.sessionStorage.removeItem('politicsstatus');
+        // window.sessionStorage.removeItem('politicsstatus');
         next();
     }else {
         if (window.localStorage.getItem('token') && window.sessionStorage.getItem('user')) {

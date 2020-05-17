@@ -35,10 +35,11 @@
                 </div>
             </div>
         </el-card>
+        <!-- 修改信息弹窗 -->
         <el-dialog
                 title="修改用户信息"
                 :visible.sync="dialogVisible"
-                width="30%">
+                width="360px">
             <div>
                 <table>
                     <tr>
@@ -56,10 +57,11 @@
                 <el-button type="primary" @click="updateUserInfo">确 定</el-button>
             </span>
         </el-dialog>
+        <!-- 修改密码弹窗 -->
         <el-dialog
                 title="修改密码"
                 :visible.sync="passwdDialogVisible"
-                width="30%">
+                width="360px">
             <div>
                 <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px"
                          class="demo-ruleForm">
@@ -69,13 +71,13 @@
                     <el-form-item label="输入新密码" prop="newPassword">
                         <el-input type="password" v-model="ruleForm.newPassword" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="新确认密码" prop="checkPass">
-                        <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+                    <el-form-item label="新确认密码" prop="checkPassword">
+                        <el-input type="password" v-model="ruleForm.checkPassword" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                    <el-form-item style="margin-top: 30px">
                         <el-button @click="passwdDialogVisible = false">取消</el-button>
                         <el-button @click="resetForm('ruleForm')">重置</el-button>
+                        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -126,15 +128,6 @@
                     checkPassword: [
                         { validator: validatePass2, trigger: 'blur' }
                     ]
-                    // password: [
-                    //     {validator: validatePass, trigger: 'blur'}
-                    // ],
-                    // newPassword: [
-                    //     {validator: validatePass, trigger: 'blur'}
-                    // ],
-                    // checkPass: [
-                    //     {validator: validatePass2, trigger: 'blur'}
-                    // ]
                 },
                 user: null,
                 user2: [],
@@ -143,11 +136,11 @@
             }
         },
         mounted() {
-            this.initHr();
+            this.initUser();
         },
         methods: {
             onSuccess() {
-                this.initHr();
+                this.initUser();
             },
             updateUserInfo() {
                 // 修改昵称
@@ -159,7 +152,7 @@
                         this.dialogVisible = false;
                         // 从session移除用户信息
                         window.sessionStorage.removeItem("user");
-                        this.initHr();
+                        this.initUser();
                     }
                 })
             },
@@ -172,17 +165,9 @@
                     if (valid) {
                         this.ruleForm.id = this.user.id;
                         this.putRequest("/user/basic/", this.ruleForm).then(resp => {
-                            if (resp.status === 20000402) {
-                                // 用户没登录，跳转至登录页面
+                            if (resp.status === 20000402 || resp.status === 200) {
+                                // 修改密码成功,信息过期,重新登陆
                                 this.$router.replace('/');
-                            } else if (resp.status === 200) {
-                                this.getRequest("/user/logout");
-                                // 从session移除用户信息
-                                window.sessionStorage.removeItem("user")
-                                // 从本地移除token
-                                window.localStorage.removeItem('token');
-                                this.$store.commit('initRoutes', []);
-                                this.$router.replace("/");
                             }
                         })
                     } else {
@@ -197,7 +182,7 @@
                 this.passwdDialogVisible = true;
                 this.ruleForm = Object.assign({}, this.user);
             },
-            initHr() {
+            initUser() {
                 this.getRequest('/user/info/').then(resp => {
                     if (resp.status === 20000402) {
                         // 用户没登录，跳转至登录页面

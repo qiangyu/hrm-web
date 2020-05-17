@@ -77,8 +77,8 @@
                 </el-row>
                 <el-row>
                     <el-col :span="5">
-                        <el-form-item label="职位:" prop="position.id">
-                            <el-select v-model="emp.position.id" placeholder="职位" size="mini" style="width: 150px;">
+                        <el-form-item label="职位:" prop="position">
+                            <el-select v-model="emp.position.id" placeholder="职位" size="mini" style="width: 180px;">
                                 <el-option
                                         v-for="item in positions"
                                         :key="item.id"
@@ -102,7 +102,7 @@
                                         @node-click="handleNodeClick"></el-tree>
                                 <div slot="reference"
                                     style="width: 150px;display: inline-flex;font-size: 13px;border: 1px solid #dedede;height: 26px;border-radius: 5px;cursor: pointer;align-items: center;padding-left: 8px;box-sizing: border-box"
-                                    @click="showDepView">{{inputDepName}}
+                                    @click="showDepView">{{ emp.department.name }}
                                 </div>
                             </el-popover>
                         </el-form-item>
@@ -184,6 +184,22 @@
     export default {
         name: "EmpBasic",
         data() {
+            // 检查部门是否为空
+            var checkDepartment = (rule, value, callback) => {
+                if (value.id === null) {
+                    callback(new Error('请选择部门'));
+                } else {
+                    callback();
+                }
+            };
+            // 检查职位是否为空
+            var checkPosition = (rule, value, callback) => {
+                if (value.id === null) {
+                    callback(new Error('请选择职位'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 // 权限
                 power: JSON.parse(window.sessionStorage.getItem("user")).status === 1 ? false : true, 
@@ -242,16 +258,16 @@
                 },
                 rules: {
                     name: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-                    gender: [{required: true, message: '请输入性别', trigger: 'blur'}],
+                    sex: [{required: true, message: '请输入性别', trigger: 'blur'}],
                     birthday: [{required: true, message: '请输入出生日期', trigger: 'blur'}],
-                    idCard: [{required: true, message: '请输入身份证号码', trigger: 'blur'}, {
+                    cardId: [{required: true, message: '请输入身份证号码', trigger: 'blur'}, {
                         // pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/,
                         pattern: /^\w+$/, 
                         message: '身份证号码格式不正确',
                         trigger: 'blur'
                     }],
-                    politicId: [{required: true, message: '请输入政治面貌', trigger: 'blur'}],
-                    email: [{required: true, message: '请输入邮箱地址', trigger: 'blur'}, {
+                    politicId: [{ required: true, message: '请输入政治面貌', trigger: 'blur'}],
+                    email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur'}, {
                         type: 'email',
                         message: '邮箱格式不正确',
                         trigger: 'blur'
@@ -268,8 +284,12 @@
                         trigger: 'blur'
                     }],
                     address: [{required: true, message: '请输入员工地址', trigger: 'blur'}],
-                    department: [{required: true, message: '请输入部门名称', trigger: 'blur'}],
-                    posId: [{required: true, message: '请输入职位', trigger: 'blur'}],
+                    race: [{required: true, message: '请输入民族', trigger: 'blur'}],
+                    party: [{required: true, message: '请输入政治面貌', trigger: 'blur'}],
+                    // 部门校验
+                    department: [{required: true, validator: checkDepartment, trigger: 'blur'}],
+                    // 职位校验
+                    position: [{required: true, validator: checkPosition, trigger: 'blur'}],
                     education: [{required: true, message: '请输入学历', trigger: 'blur'}],
                     speciality: [{required: true, message: '请输入专业', trigger: 'blur'}], 
                     hobby: [{required: true, message: '请输入爱好', trigger: 'blur'}], 
@@ -283,12 +303,14 @@
             }
         },
         mounted() {
-            this.initData();
+            // 有权限时,加载数据
+            if (this.power) {
+                this.initData();
+            }
         },
         methods: {
             // 重置添加员工表单
              resetForm(formName) {
-                this.emptyEmp();
                 this.$refs[formName].resetFields();
             }, 
             emptyEmp() {
@@ -330,7 +352,7 @@
             },
             doAddEmp() {
                 // 添加
-                if (!this.emp.id) {
+                if (this.emp.id === null) {
                     this.$refs['empForm'].validate(valid => {
                         if (valid) {
                             this.postRequest("/employee/basic/", this.emp).then(resp => {
@@ -347,9 +369,7 @@
             },
             // 选取部门信息
             handleNodeClick(data) {
-                this.inputDepName = data.name;
-                this.emp.department.name = data.name;
-                this.emp.department.id = data.id;
+                this.emp.department = Object.assign({}, data);
                 this.showAddDepView = !this.showAddDepView;
             },
             // 所属部门的小窗口
@@ -367,7 +387,9 @@
                         }
                     })
                 } else {
-                    this.nations = JSON.parse(window.sessionStorage.getItem("nations"));
+                    if (this.nations !== null) {
+                        this.nations = JSON.parse(window.sessionStorage.getItem("nations"));
+                    }
                 }
                 // 政治面貌
                 if (!window.sessionStorage.getItem("politicsstatus")) {
@@ -378,18 +400,22 @@
                         }
                     })
                 } else {
-                    this.politicsstatus = JSON.parse(window.sessionStorage.getItem("politicsstatus"));
+                    if (this.politicsstatus !== null) {
+                        this.politicsstatus = JSON.parse(window.sessionStorage.getItem("politicsstatus"));
+                    }
                 }
                 // 部门
-                if (!window.sessionStorage.getItem("deps")) {
+                if (!window.sessionStorage.getItem("department")) {
                     this.getRequest('/department/basic/').then(resp => {
                         if (resp) {
                             this.allDeps = resp.obj;
-                            window.sessionStorage.setItem("deps", JSON.stringify(resp.obj));
+                            window.sessionStorage.setItem("department", JSON.stringify(resp.obj));
                         }
                     })
                 } else {
-                    this.allDeps = JSON.parse(window.sessionStorage.getItem("deps"));
+                    if (this.allDeps !== null) {
+                        this.allDeps = JSON.parse(window.sessionStorage.getItem("department"));
+                    }
                 }
                 // 职位
                 if (!window.sessionStorage.getItem("positions")) {
@@ -400,7 +426,9 @@
                         }
                     })
                 } else {
-                    this.positions = JSON.parse(window.sessionStorage.getItem("positions"));
+                    if (this.positions !== null) {
+                        this.positions = JSON.parse(window.sessionStorage.getItem("positions"));
+                    }
                 }
             }
         }

@@ -71,10 +71,6 @@
                         this.postKeyValueRequest('/user/doLogin', this.loginForm).then(resp => {
                             this.loading = false;
 
-                            // alert(JSON.stringify(resp));
-                            // alert(JSON.stringify(resp.obj.status));
-                            // console.log(JSON.stringify(resp));
-
                             if (resp.status === 20000402) {
                                 // 用户没登录，跳转至登录页面
                                 this.$router.replace('/');

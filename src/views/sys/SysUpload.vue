@@ -41,7 +41,7 @@
                     </el-upload>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer" style="margin-left: 25%;">
+            <span slot="footer" class="dialog-footer" style="float: right;">
                 <el-button @click="cancel">取 消</el-button>
                 <el-button @click="resetForm('documentContent')">重置</el-button>
                 <el-button type="primary" @click="doAddDocument">确 定</el-button>

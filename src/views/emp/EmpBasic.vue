@@ -83,7 +83,7 @@
                                          @node-click="searvhViewHandleNodeClick"></el-tree>
                                 <div slot="reference"
                                      style="width: 130px;display: inline-flex;font-size: 13px;border: 1px solid #dedede;height: 26px;border-radius: 5px;cursor: pointer;align-items: center;padding-left: 8px;box-sizing: border-box;margin-left: 3px"
-                                     @click="showDepView2">{{inputDepName}}
+                                     @click="showDepView2">{{ emp.department.name }}
                                 </div>
                             </el-popover>
                             <el-button type="primary" @click="showAdvanceSearchView = !showAdvanceSearchView">
@@ -227,10 +227,9 @@
                         width="100"
                         label="操作">
                     <template slot-scope="scope">
-                        <el-button :disabled="!power" @click="showEditEmpView(scope.row)" style="padding: 3px" size="mini">编辑</el-button>
+                        <el-button :disabled="!power" @click="showEditEmpView(scope.row)" style="padding: 3px" size="mini" type="primary">编辑</el-button>
                         <!-- <el-button style="padding: 3px" size="mini" type="primary">查看高级资料</el-button> -->
                         <el-button :disabled="!power" @click="deleteEmp(scope.row)" style="padding: 3px" size="mini" type="danger">删除</el-button>
-                        <!-- <p v-if="!power" style="color: red;">权限不足，无法操作</p> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -250,7 +249,7 @@
         <el-dialog
                 :title="title"
                 :visible.sync="dialogVisible"
-                width="80%">
+                width="1370px">
             <div>
                 <el-form :model="emp" :rules="rules" ref="empForm">
                     <el-row>
@@ -308,7 +307,7 @@
                         </el-col>
                         <el-col :span="5">
                             <el-form-item label="电子邮箱:" prop="email">
-                                <el-input size="mini" style="width: 150px" prefix-icon="el-icon-message"
+                                <el-input size="mini" style="width: 170px" prefix-icon="el-icon-message"
                                           v-model="emp.email" placeholder="请输入电子邮箱"></el-input>
                             </el-form-item>
                         </el-col>
@@ -327,8 +326,8 @@
                     </el-row>
                     <el-row>
                         <el-col :span="6">
-                            <el-form-item label="职位:" prop="position.id">
-                                <el-select v-model="emp.position.id" placeholder="职位" size="mini" style="width: 150px;">
+                            <el-form-item label="职位:" prop="position">
+                                <el-select v-model="emp.position.id" placeholder="职位" size="mini" style="width: 180px;">
                                     <el-option
                                             v-for="item in positions"
                                             :key="item.id"
@@ -346,12 +345,11 @@
                                         width="200"
                                         trigger="manual"
                                         v-model="showAddDepView">
-                                        <!-- :visible.sync=" -->
                                     <el-tree default-expand-all :data="allDeps" :props="defaultProps"
                                             @node-click="handleNodeClick"></el-tree>
                                     <div slot="reference"
                                         style="width: 150px;display: inline-flex;font-size: 13px;border: 1px solid #dedede;height: 26px;border-radius: 5px;cursor: pointer;align-items: center;padding-left: 8px;box-sizing: border-box"
-                                        @click="showDepView">{{inputDepName}}
+                                        @click="showDepView">{{ emp.department.name }}
                                     </div>
                                 </el-popover>
                             </el-form-item>
@@ -384,7 +382,7 @@
                             </el-form-item>
                         </el-col>
                         
-                        <el-col :span="5">
+                        <el-col :span="6">
                             <el-form-item label="专业名称:" prop="speciality">
                                 <el-input size="mini" style="width: 200px" prefix-icon="el-icon-edit"
                                           v-model="emp.speciality" placeholder="请输入专业名称"></el-input>
@@ -404,7 +402,7 @@
                                           v-model="emp.hobby" placeholder="请输入爱好"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="5">
+                        <el-col :span="6">
                             <el-form-item label="自我描述:" prop="remark">
                                 <el-input size="mini" style="width: 200px" prefix-icon="el-icon-edit"
                                           v-model="emp.remark" placeholder="请输入对自我的描述"></el-input>
@@ -432,6 +430,22 @@
     export default {
         name: "EmpBasic",
         data() {
+            // 检查部门是否为空
+            var checkDepartment = (rule, value, callback) => {
+                if (value.id === null) {
+                    callback(new Error('请选择部门'));
+                } else {
+                    callback();
+                }
+            };
+            // 检查职位是否为空
+            var checkPosition = (rule, value, callback) => {
+                if (value.id === null) {
+                    callback(new Error('请选择职位'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 // 搜索数据
                 searchValue: {
@@ -459,6 +473,7 @@
                 allDeps: [],
                 // 添加员工的部门信息备份
                 addAllDeps: [], 
+                // 查询出来的员工信息
                 emps: [],
                 // 批量删除
                 multipleSelection: [],
@@ -487,12 +502,12 @@
                     sex: 1,
                     birthday: "1989-12-31",
                     cardId: "610122199001011256",
-                    // 民族
                     nationId: 1,
+                    // 民族
                     race: '', 
-
-                    // 政治面貌
+                    
                     politicId: 13,
+                    // 政治面貌
                     party: '', 
                     
                     email: "laowang@qq.com",
@@ -523,16 +538,16 @@
                 },
                 rules: {
                     name: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-                    gender: [{required: true, message: '请输入性别', trigger: 'blur'}],
+                    sex: [{required: true, message: '请输入性别', trigger: 'blur'}],
                     birthday: [{required: true, message: '请输入出生日期', trigger: 'blur'}],
-                    idCard: [{required: true, message: '请输入身份证号码', trigger: 'blur'}, {
+                    cardId: [{required: true, message: '请输入身份证号码', trigger: 'blur'}, {
                         // pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/,
                         pattern: /^\w+$/, 
                         message: '身份证号码格式不正确',
                         trigger: 'blur'
                     }],
-                    politicId: [{required: true, message: '请输入政治面貌', trigger: 'blur'}],
-                    email: [{required: true, message: '请输入邮箱地址', trigger: 'blur'}, {
+                    politicId: [{ required: true, message: '请输入政治面貌', trigger: 'blur'}],
+                    email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur'}, {
                         type: 'email',
                         message: '邮箱格式不正确',
                         trigger: 'blur'
@@ -549,8 +564,12 @@
                         trigger: 'blur'
                     }],
                     address: [{required: true, message: '请输入员工地址', trigger: 'blur'}],
-                    department: [{required: true, message: '请输入部门名称', trigger: 'blur'}],
-                    posId: [{required: true, message: '请输入职位', trigger: 'blur'}],
+                    race: [{required: true, message: '请输入民族', trigger: 'blur'}],
+                    party: [{required: true, message: '请输入政治面貌', trigger: 'blur'}],
+                    // 部门校验
+                    department: [{required: true, validator: checkDepartment, trigger: 'blur'}],
+                    // 职位校验
+                    position: [{required: true, validator: checkPosition, trigger: 'blur'}],
                     education: [{required: true, message: '请输入学历', trigger: 'blur'}],
                     speciality: [{required: true, message: '请输入专业', trigger: 'blur'}], 
                     hobby: [{required: true, message: '请输入爱好', trigger: 'blur'}], 
@@ -565,7 +584,8 @@
         },
         mounted() {
             this.initEmps();
-            this.initData();
+            // 采用懒加载的方式加载依赖信息,点击添加按钮或者编辑时才加载
+            // this.initData();
             this.initPositions();
         },
         methods: {
@@ -580,9 +600,14 @@
                 this.showAdvanceSearchView = !this.showAdvanceSearchView;
             }, 
             // 添加用户是重置输入框
-             resetForm(formName) {
-                this.emptyEmp();
-                this.$refs[formName].resetFields();
+            resetForm(formName) {
+                // this.emptyEmp();
+                // this.$refs[formName].resetFields();
+
+                this.$nextTick(()=>{
+                    this.$refs[formName].resetFields();
+                })
+
             }, 
             // 批量删除
             deleteMany() {
@@ -591,7 +616,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    if (this.multipleSelection) {
+                    if (this.multipleSelection !== null) {
                         this.deleteRequest("/employee/basic/ids/", this.multipleSelection).then(resp => {
                             if (resp.status === 20000402) {
                                 // 用户没登录，跳转至登录页面
@@ -615,7 +640,7 @@
             searvhViewHandleNodeClick(data) {
                 this.inputDepName = data.name;
                 this.searchValue.departmentId = data.id;
-                this.showSearchDepView = !this.showSearchDepView
+                this.showSearchDepView = !this.showSearchDepView;
             },
             onError(err, file, fileList) {
                 this.importDataBtnText = '导入数据';
@@ -670,51 +695,17 @@
                     department: {
                         id: null
                     }
-
-                    // name: "",
-                    // gender: "",
                 }
                 this.inputDepName = '';
             },
-            showEditEmpView(data) {
-                this.initPositions();
-                this.title = '编辑员工信息';
-
-                // this.emp = {...data};
-
-                this.emp.id = data.id;
-                this.emp.name = data.name;
-                this.emp.sex = data.sex;
-                this.emp.birthday = data.birthday;
-                this.emp.cardId = data.cardId;
-                this.emp.race = data.race;
-                this.emp.party = data.party;
-                this.emp.email = data.email;
-                this.emp.phone = data.phone;
-                this.emp.tel = data.tel;
-                this.emp.qqNum = data.qqNum;
-                this.emp.address = data.address;
-                this.emp.education = data.education;
-                this.emp.specialty = data.specialty;
-                this.emp.postCode = data.postCode;
-                this.emp.hobby = data.hobby;
-                this.emp.remark = data.remark;
-                this.emp.createDate = data.createDate;
-                this.emp.position.id = data.position.id;
-                this.emp.department.id = data.department.id;
-
-                this.emp.position.name = null;
-                this.emp.department.name = null;
-                this.isEditEmp = false;
-                this.dialogVisible = true;
-            },
+            // 删除
             deleteEmp(data) {
                 this.$confirm('此操作将永久删除【' + data.name + '】, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    if (data.id && data.name) {
+                    if (data.id !== null && data.name !== '') {
                         this.deleteRequest("/employee/basic/", data).then(resp => {
                             if (resp.status === 20000402) {
                                 // 用户没登录，跳转至登录页面
@@ -733,7 +724,7 @@
             },
             doAddEmp() {
                 // 编辑
-                if (this.emp.id) {
+                if (this.emp.id !== null) {
                     this.$refs['empForm'].validate(valid => {
                         if (valid) {
                             this.putRequest("/employee/basic/", this.emp).then(resp => {
@@ -767,29 +758,19 @@
                 }
             },
             handleNodeClick(data) {
-                this.inputDepName = data.name;
-                this.emp.department.name = data.name;
-                this.emp.department.id = data.id;
-                this.showAddDepView = !this.showAddDepView
+                // 这样直接赋值时赋指针？？
+                // this.inputDepName = this.emp.department.name = data.name;
+                // 必须这样赋值，作为后端狗，目前看不懂.....
+                this.emp.department = Object.assign({}, data);
+                this.showAddDepView = !this.showAddDepView;
             },
             showDepView() {
                 this.showAddDepView = !this.showAddDepView;
             },
             showDepView2() {
-                this.showSearchDepView = !this.showSearchDepView
+                this.showSearchDepView = !this.showSearchDepView;
             },
-            initPositions() {
-                if (!window.sessionStorage.getItem("positions")) {
-                    this.getRequest('/position/basic/').then(resp => {
-                        if (resp) {
-                            this.positions = resp.obj;
-                            window.sessionStorage.setItem("positions", JSON.stringify(resp.obj));
-                        }
-                    })
-                } else {
-                    this.positions = JSON.parse(window.sessionStorage.getItem("positions"));
-                }
-            },
+            // 采用懒加载的方式加载依赖信息,点击添加按钮或者编辑时才加载
             initData() {
                 // 民族
                 if (!window.sessionStorage.getItem("nations")) {
@@ -800,7 +781,9 @@
                         }
                     })
                 } else {
-                    this.nations = JSON.parse(window.sessionStorage.getItem("nations"));
+                    if (this.nations !== null) {
+                        this.nations = JSON.parse(window.sessionStorage.getItem("nations"));
+                    }
                 }
                 // 政治面貌
                 if (!window.sessionStorage.getItem("politicsstatus")) {
@@ -811,18 +794,35 @@
                         }
                     })
                 } else {
-                    this.politicsstatus = JSON.parse(window.sessionStorage.getItem("politicsstatus"));
+                    if (this.politicsstatus !== null) {
+                        this.politicsstatus = JSON.parse(window.sessionStorage.getItem("politicsstatus"));
+                    }
                 }
                 // 部门
-                if (!window.sessionStorage.getItem("deps")) {
+                if (!window.sessionStorage.getItem("department")) {
                     this.getRequest('/department/basic/').then(resp => {
                         if (resp) {
                             this.allDeps = resp.obj;
-                            window.sessionStorage.setItem("deps", JSON.stringify(resp.obj));
+                            window.sessionStorage.setItem("department", JSON.stringify(resp.obj));
                         }
                     })
                 } else {
-                    this.allDeps = JSON.parse(window.sessionStorage.getItem("deps"));
+                    if (this.allDeps !== null) {
+                        this.allDeps = JSON.parse(window.sessionStorage.getItem("department"));
+                    }
+                }
+                // 职位
+                if (!window.sessionStorage.getItem("positions")) {
+                    this.getRequest('/position/basic/').then(resp => {
+                        if (resp) {
+                            this.positions = resp.obj;
+                            window.sessionStorage.setItem("positions", JSON.stringify(resp.obj));
+                        }
+                    })
+                } else {
+                    if (this.positions !== null) {
+                        this.positions = JSON.parse(window.sessionStorage.getItem("positions"));
+                    }
                 }
             },
             sizeChange(currentSize) {
@@ -833,11 +833,31 @@
                 this.page = currentPage;
                 this.initEmps();
             },
+            // 编辑
+            showEditEmpView(data) {
+                // 重置表单
+                this.resetForm('empForm');
+                // 初始化添加员工所依赖的数据,部门信息以及职位信息
+                this.initData();
+                this.title = '编辑员工信息';
+                // this.emp = {...data};
+                // 将data里面全部属性的值赋给emp
+                this.emp = Object.assign({}, data);
+                
+                this.isEditEmp = false;
+                this.dialogVisible = true;
+            },
+            // 添加
             showAddEmpView() {
+                // 清除数据，并重置表单
                 this.emptyEmp();
+                this.resetForm('empForm');
+                // 初始化添加员工所依赖的数据,部门信息以及职位信息
+                this.initData();
                 this.title = '添加员工';
                 this.addAllDeps = this.allDeps;
                 // this.getMaxWordID();
+                
                 this.isEditEmp = true;
                 this.dialogVisible = true;
             },

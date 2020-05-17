@@ -40,13 +40,13 @@
             </div>
             <transition name="slide-fade">
                 <div v-show="showAdvanceSearchView"
-                     style="border: 1px solid #409eff; border-radius: 5px; box-sizing: border-box; padding: 5px; margin: 10px 0px; min-width: 750px;">
+                     style="border: 1px solid #409eff; border-radius: 5px; box-sizing: border-box; padding: 5px; margin: 10px 0px; min-width: 760px;">
                     <el-row>
-                        <!-- <el-col :span="5" style="margin: 10px">
+                        <el-col style="margin: 10px">
                             用户账号:
                             <el-select v-model="searchValue.loginname" placeholder="用户账号" size="mini"
-                                       style="width: 250px;">
-                                &ensp;查找：<el-input v-model="searchValue.loginname" placeholder="输入需查找用户账号" size="mini" style="width: 180px" />
+                                       style="width: 250px; margin-right: 20px;">
+                                &ensp;查找：<el-input v-model="searchValue.loginname" placeholder="输入需查找用户账号" size="mini" style="width: 180px;" />
                                 <el-option
                                         v-for = "user in users"
                                         :key = "user.id"
@@ -54,11 +54,9 @@
                                         :value = "user.loginname">
                                 </el-option>
                             </el-select>
-                        </el-col> -->
-                        <el-col  style="margin: 10px">
                             用户状态:
                             <el-select v-model="searchValue.status" placeholder="用户状态" size="mini"
-                                       style="width: 130px; margin-right: 50px;">
+                                       style="width: 130px; margin-right: 30px;">
                                 <el-option
                                         v-for = "user in userStatus"
                                         :key = "user"
@@ -137,7 +135,7 @@
                                 !(loginUserId === scope.row.id) && !(power === 2 && power > scope.row.status) && !(power === 3)
                                    用户id相同，表示是同一个用户       登陆用户是管理员（2），并且这行用户的权限不高于管理员  权限为开发者（3）不禁用  ---》  然后全部取反
                         -->
-                        <el-button :disabled="!(loginUserId === scope.row.id) && !(power === 2 && power > scope.row.status) && !(power === 3)" @click="showUpdateUserInfoView(scope.row)" style="padding: 3px; margin-left: 2px" size="mini">编辑信息</el-button>
+                        <el-button :disabled="!(loginUserId === scope.row.id) && !(power === 2 && power > scope.row.status) && !(power === 3)" @click="showUpdateUserInfoView(scope.row)" style="padding: 3px; margin-left: 2px" size="mini" type="primary">编辑信息</el-button>
                         <el-button :disabled="!(loginUserId === scope.row.id) && !(power === 2 && power > scope.row.status) && !(power === 3)" @click="showUpdatePasswdView(scope.row)" style="padding: 3px" size="mini" type="primary">修改密码</el-button>
                         <el-button :disabled="!(loginUserId === scope.row.id) && !(power === 2 && power > scope.row.status) && !(power === 3)" @click="deleteUser(scope.row)" style="padding: 3px" size="mini" type="danger">删除</el-button>
                     </template>
@@ -160,42 +158,49 @@
         <el-dialog
                 :title="title"
                 :visible.sync="dialogVisible"
-                width="80%">
+                width="360px">
             <div>
-                <el-form :model="newUser" :rules="rules" ref="newUser">
-                    <el-row style="text-align: center">
-                        <el-col :span="4">
-                            <el-form-item label="用户名:" prop="username">
-                                <el-input size="small " maxlength="10" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.username"
-                                          placeholder="请输入用户名"></el-input>
+                <el-form :model="newUser" :rules="rules" ref="newUser" :disabled="!power">
+                    <el-row>
+                        <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
+                            <el-form-item label="用户名称:" prop="username">
+                                <el-input size="small " maxlength="10" style="min-width: 150px" prefix-icon="el-icon-edit" v-model="newUser.username"
+                                        placeholder="请输入用户名"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="4">
+                    </el-row>
+                    <el-row>
+                        <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
                             <el-form-item label="用户账号:" prop="loginname">
-                                <el-input size="small " maxlength="16" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.loginname"
-                                          placeholder="请输入用户账号" :disabled="isEditUser"></el-input>
+                                <el-input size="small " maxlength="16" style="min-width: 150px" prefix-icon="el-icon-edit" v-model="newUser.loginname"
+                                        placeholder="请输入用户账号" :disabled="isEditUser"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="4">
-                            <el-form-item label="新密码" prop="password">
-                                <el-input type="password" size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.password"
-                                          placeholder="请输入密码"></el-input>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
+                            <el-form-item label="账号密码:" prop="password">
+                                <el-input type="password" size="small " maxlength="32" style="min-width: 150px" prefix-icon="el-icon-edit" v-model="newUser.password"
+                                        placeholder="请输入密码"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="4">
+                    </el-row>
+                    <el-row>
+                        <el-col :span="5" style="margin-bottom: 20px; min-width: 200px;">
                             <el-form-item label="确认密码:" prop="checkPassword">
-                                <el-input type="password" size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="newUser.checkPassword"
-                                          placeholder="请确认密码"></el-input>
+                                <el-input type="password" size="small " maxlength="32" style="min-width: 150px" prefix-icon="el-icon-edit" v-model="newUser.checkPassword"
+                                        placeholder="请确认密码"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="用户权限:" prop="status">
+                    </el-row>
+                    <el-row>
+                        <el-col :span="5" style="min-width: 260px;">
+                            <el-form-item label="用户状态:" prop="status">
                                 <el-radio-group v-model="newUser.status">
-                                    <el-radio :label="1">普通用户</el-radio>
-                                    <el-radio :label="2">超级管理员</el-radio>
+                                    <el-radio label="1">普通用户</el-radio>
+                                    <el-radio label="2">管理员</el-radio>
                                 </el-radio-group>
                             </el-form-item>
-                            <!-- <p>如果没有选择权限，则默认普通用户！</p> -->
                         </el-col>
                     </el-row>
                 </el-form>
@@ -210,7 +215,7 @@
         <el-dialog
                 title="修改用户信息"
                 :visible.sync="updateDialogVisible"
-                width="30%">
+                width="360px">
             <div>
                 <table>
                     <tr>
@@ -232,7 +237,7 @@
         <el-dialog
                 title="修改密码"
                 :visible.sync="passwordDialogVisible"
-                width="30%">
+                width="360px">
             <div>
                 <el-form :model="ruleForm" status-icon :rules="updatePasswordRules" ref="ruleForm" label-width="100px"
                          class="demo-ruleForm">
@@ -246,9 +251,9 @@
                         <el-input type="password" v-model="ruleForm.checkPassword" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item style="margin-top: 30px">
-                        <el-button type="primary" @click="submitPasswordForm('ruleForm')">提交</el-button>
                         <el-button @click="passwordDialogVisible = false">取消</el-button>
                         <el-button @click="resetForm('ruleForm')">重置</el-button>
+                        <el-button type="primary" @click="submitPasswordForm('ruleForm')">提交</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -365,27 +370,27 @@
                 },
                 
                 rules: {
-                    username: [{required: true, message: '请输入用户名！', trigger: 'blur'}, {
+                    username: [{ required: true, message: '请输入用户名！', trigger: 'blur' }, {
                         pattern: /[^\~\!\@\#\$\%\^\&\*\(\)\_\+\=\{\}\[\]\<\>\?\/\\\！\￥\……\…\（\）\——\—\【\】\、\《\》\？\;\|\'\"\；\‘\’\”\“]{5,16}$/g, 
                         message: '用户名由任意字符组成5-16位(特殊字符除外)！', 
                         trigger: 'blur'
                     }], 
-                    loginname: [{required: true, message: '请输入用户账号！', trigger: 'blur'}, {
+                    loginname: [{ required: true, message: '请输入用户账号！', trigger: 'blur' }, {
                         pattern: /^[0-9A-Za-z]{5,16}$/g, 
                         // pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/g, 
                         message: '用户名由字母或数字组成5-16位！', 
                         trigger: 'blur'
                     }],
-                    password: [{required: true, message: '请输入密码！', trigger: 'blur'}, {
+                    password: [{ required: true, message: '请输入密码！', trigger: 'blur' }, {
                         pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/g, 
                         message: '密码由字母数字组成6-16位！', 
                         trigger: 'blur'
                     }],
                     checkPassword: [
-                        { validator: validateAddUserPassword, trigger: 'blur' }
+                        { required: true, validator: validateAddUserPassword, trigger: 'blur' }
                     ], 
                     status: [
-                        { validator: powerFun, trigger: 'blur' }
+                        { required: true, validator: powerFun, trigger: 'blur' }
                     ]
 
                     // [{required: true, message: '请确认密码', trigger: 'blur'}]
@@ -402,7 +407,7 @@
                         trigger: 'blur'
                     }],
                     checkPassword: [
-                        { validator: validateUpdateUserPassword, trigger: 'blur' }
+                        { required: true, validator: validateUpdateUserPassword, trigger: 'blur' }
                     ]
                 }
             }
@@ -474,21 +479,10 @@
             },
             showEditEmpView(data) {
                 this.title = '编辑用户信息';
-                // 验证修改的密码是否与之前的密码相同，不过用户万一不想改密码呢。。
-                // this.newUser.newPassword = data.password;
                 // 不允许编辑用户名
                 this.isEditUser = true;
-
                 // 数据回显
-                this.newUser.id = data.id;
-                this.newUser.username = data.username;
-                this.newUser.loginname = data.loginname;
-                this.newUser.password = data.password;
-                this.newUser.checkPassword = data.password;
-                this.newUser.createdate = data.createdate;
-                this.newUser.status = data.status;
-                // alert(JSON.stringify(this.newUser));
-
+                this.newUser = Object.assign({}, this.data);
                 this.dialogVisible = true;
             },
             deleteUser(data) {
@@ -500,8 +494,6 @@
                     if (data.id && data.loginname) {
                         this.deleteRequest("/user/basic/", data).then(resp => {
                             if (resp.status === 20000402) {
-                                // window.sessionStorage.removeItem('user');
-                                // window.localStorage.removeItem('token');
                                 // 用户没登录，跳转至登录页面
                                 this.$router.replace('/');
                             } else if (resp.status === 200) {
@@ -526,13 +518,8 @@
                                 // 用户没登录，跳转至登录页面
                                 this.$router.replace('/');
                             } else if (resp.status === 200) {
-                                this.getRequest("/user/logout");
-                                // 从session移除用户信息
-                                window.sessionStorage.removeItem("user")
-                                // 从本地移除token
-                                window.localStorage.removeItem('token');
-                                this.$store.commit('initRoutes', []);
-                                this.$router.replace("/");
+                                this.passwordDialogVisible = false;
+                                that.initUsers();
                             }
                         })
                     } else {
@@ -549,8 +536,6 @@
                             this.$router.replace('/');
                         } else if (resp.status === 200) {
                             this.updateDialogVisible = false;
-                            // 从session移除用户信息
-                            // window.sessionStorage.removeItem("user");
                             this.initUsers();
                         }
                     })
@@ -560,13 +545,10 @@
                 // 有id表示编辑
                 if (this.newUser.id) {
                     this.$refs['newUser'].validate(valid => {
-                        // alert(valid);
                         let that = this;
                         if (valid) {
                             this.putRequest("/user/basic/", that.newUser).then(resp => {
                                 if (resp.status === 20000402) {
-                                    // window.sessionStorage.removeItem('user'); 
-                                    // window.localStorage.removeItem('token');
                                     // 用户没登录，跳转至登录页面
                                     this.$router.replace('/');
                                 } else if (resp.status === 200) {
@@ -581,10 +563,7 @@
                     this.$refs['newUser'].validate(valid => {
                         if (valid) {
                             this.postRequest("/user/basic/", this.newUser).then(resp => {
-                                // alert(JSON.stringify(this.newUser));
                                 if (resp.status === 20000402) {
-                                    // window.sessionStorage.removeItem('user');
-                                    // window.localStorage.removeItem('token');
                                     // 用户没登录，跳转至登录页面
                                     this.$router.replace('/');
                                 } else if (resp.status === 200) {
@@ -655,22 +634,15 @@
                         this.total = resp.obj.total;
 
                         // 将 1 2 3 转为文本意思
-                        if(this.users.length != 0) {
+                        if(this.users.length !== 0) {
                             this.users.forEach(v => {
-                                // alert(JSON.stringify(v));
                                 v.textStatus = (v.status === 1 ? '普通用户' : v.status === 2 ? '管理员' : v.status === 3 ? '开发者' : '权限异常');
                             });
                         }
-                    } else if (resp.status != 200) {
+                    } else if (resp.status !== 200) {
                         this.users = null;
                         this.total = 0;
                     }
-                    // alert(JSON.stringify(resp.data));
-                    // alert(JSON.stringify(resp.total));
-                    // alert(window.localStorage.getItem("token"));
-                    // console.log(this.power);
-                    // console.log(JSON.parse(window.sessionStorage.getItem("user")) + '<-----用户信息');
-                    // console.log(JSON.parse(window.localStorage.getItem("token")) + '<-----token');
                 });
             }
         }

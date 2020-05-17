@@ -54,6 +54,7 @@
                     <template slot-scope="scope">
                         <el-button
                                 size="mini"
+                                type="primary"
                                 @click="showEditView(scope.$index, scope.row)"
                                 :disabled="!power">编辑
                         </el-button>
@@ -73,7 +74,7 @@
         <el-dialog
                 title="修改职位"
                 :visible.sync="dialogVisible"
-                width="30%">
+                width="360px">
             <div>
                 <div>
                     <el-tag>职位名称</el-tag>
@@ -137,17 +138,14 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    // // let ids = '?';
-                    // let ids = []; 
-                    // this.multipleSelection.forEach((item, index) => {
-                    //     ids[index] = item.id;
-                    // })
                     this.deleteRequest("/position/basic/ids/", this.multipleSelection).then(resp => {
                         if (resp.status === 20000402) {
                             // 用户没登录，跳转至登录页面
                             this.$router.replace('/');
                         } else if (resp.status === 200) {
                             this.initPositions();
+                            // 删除操作,移除session里面得职位信息,不然缓存的存在会导致在添加或修改员工时依赖的职位信息不能及时的更新
+                            window.sessionStorage.removeItem('positions');
                         }
                     })
                 }).catch(() => {
@@ -177,6 +175,8 @@
                         this.updatePos.name = '';
                         this.updatePos.remark = '';
                         this.dialogVisible = false;
+                        // 删除操作,移除session里面得职位信息,不然缓存的存在会导致在添加或修改员工时依赖的职位信息不能及时的更新
+                        window.sessionStorage.removeItem('positions');
                     }
                 })
             },
@@ -192,6 +192,8 @@
                             this.$router.replace('/');
                         } else if (resp.status === 200) {
                             this.initPositions();
+                            // 删除操作,移除session里面得职位信息,不然缓存的存在会导致在添加或修改员工时依赖的职位信息不能及时的更新
+                            window.sessionStorage.removeItem('positions');
                         }
                     })
                 }).catch(() => {

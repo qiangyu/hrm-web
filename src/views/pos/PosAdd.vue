@@ -16,9 +16,9 @@
                     prefix-icon="el-icon-plus"
                     @keydown.enter.native="addPosition"
                     v-model="pos.name">
-            </el-input>
+                </el-input>
             </el-row>
-
+            
             <el-row style="margin-bottom: 20px;">
                 <el-input
                     :disabled="!power"
@@ -33,11 +33,11 @@
                     @keydown.enter.native="addPosition"
                     v-model="pos.remark"
                     style="margin-right: 20px;">
-            </el-input>
+                </el-input>
             </el-row>
-        
-            <el-button :disabled="!power" icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
+            <el-button style="float: right;" icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
         </div>
+
     </div>
 </template>
 
@@ -68,6 +68,8 @@
                     } else if (resp.status === 200) {
                         this.pos.name = '';
                         this.pos.remark = '';
+                        // 删除操作,移除session里面得职位信息,不然缓存的存在会导致在添加或修改员工时依赖的职位信息不能及时的更新
+                        window.sessionStorage.removeItem('positions');
                     }
                 })
             }

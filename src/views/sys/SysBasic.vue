@@ -86,10 +86,9 @@
                         width="150"
                         label="操作">
                     <template slot-scope="scope">
-                        <el-button :disabled="!power" @click="showEditDocuView(scope.row)" style="padding: 3px" size="mini">编辑</el-button>
+                        <el-button :disabled="!power" @click="showEditDocuView(scope.row)" style="padding: 3px" type="primary" size="mini">编辑</el-button>
                         <el-button :disabled="!power" @click="deleteEmp(scope.row)" style="padding: 3px" size="mini" type="danger">删除</el-button>
                         <el-button @click="downloadDocument(scope.row)" style="padding: 3px" size="mini">下载</el-button>
-                        <!-- <p v-if="!power" style="color: red;">权限不足，无法操作</p> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -108,69 +107,64 @@
         <el-dialog
                 :title="title"
                 :visible.sync="dialogVisible"
-                width="80%">
+                width="360px">
             <div>
                 <el-form :model="editDocument" :rules="rules" ref="editDocument">
                     <el-row style="text-align: center">
-                        <el-col :span="7">
-                            <el-form-item label="标题:" prop="title">
+                        <el-col>
+                            <el-form-item label="文件标题:" prop="title">
                                 <el-input size="small " maxlength="20" style="width: 250px" prefix-icon="el-icon-edit" v-model="editDocument.title"
                                           placeholder="请输入标题"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="7">
+                    </el-row>
+                    <el-row>
+                        <el-col>
                             <el-form-item label="文件描述:" prop="remark">
                                 <el-input size="small " maxlength="100" style="width: 250px" prefix-icon="el-icon-edit" v-model="editDocument.remark"
                                           placeholder="请输入对文件的描述"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="7">
-                            <el-form-item label="文件名称:" prop="password">
+                    </el-row>
+                    <el-row>
+                        <el-col>
+                            <el-form-item label="文件名称:" prop="fileName">
                                 <el-input size="small " maxlength="32" style="width: 200px" prefix-icon="el-icon-edit" v-model="editDocument.fileName"
                                           :disabled="true"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="7">
-                            <el-form-item label="文件路径:" prop="filePath">
-                                <el-input size="small " maxlength="32" style="width: 350px" prefix-icon="el-icon-edit" v-model="editDocument.filePath"
-                                :disabled="true"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="4">
+                        <el-col>
                             <el-form-item label="文件类型:" prop="fileType">
                                 <el-input size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="editDocument.fileType"
                                 :disabled="true"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="4">
+                    </el-row>
+                    <el-row>
+                        <el-col>
                             <el-form-item label="文件大小:" prop="fileSize">
                                 <el-input size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="editDocument.fileSize"
                                 :disabled="true"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="4">
+                    </el-row>
+                    <el-row>
+                        <el-col>
                             <el-form-item label="上传时间:" prop="createDate">
                                 <el-input size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="editDocument.createDate"
                                 :disabled="true"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="4">
+                    </el-row>
+                    <el-row>
+                        <el-col>
                             <el-form-item label="上传用户:" prop="user.loginname">
                                 <el-input size="small " maxlength="32" style="width: 150px" prefix-icon="el-icon-edit" v-model="editDocument.user.loginname"
                                 :disabled="true"></el-input>
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :span="8">
-                            <el-form-item label="用户状态:" prop="status">
-                                <el-radio-group v-model="newUser.status">
-                                    <el-radio :label="1">普通用户</el-radio>
-                                    <el-radio :label="2">超级管理员</el-radio>
-                                </el-radio-group>
-                            </el-form-item> -->
-                            <!-- <p>如果没有选择权限，则默认普通用户！</p> -->
-                        <!-- </el-col> -->
                     </el-row>
                 </el-form>
             </div>
@@ -219,8 +213,8 @@
                 // 权限
                 power: JSON.parse(window.sessionStorage.getItem("user")).status == 1 ? false : true, 
                 rules: {
-                    title: [{required: true, message: '请输入文件标题！', trigger: 'blur'}], 
-                    remark: [{required: true, message: '请输入对文件的描述！', trigger: 'blur'}]
+                    title: [{ message: '请输入文件标题！', trigger: 'blur'}], 
+                    remark: [{ message: '请输入对文件的描述！', trigger: 'blur'}]
                 }
             }
         },
@@ -266,16 +260,6 @@
             }, 
             // 下载
             downloadDocument(data) {
-                // alert(JSON.stringify(data));
-                // this.getRequest("/document/basic/download/?fileName=" + data.fileName).then(resp => {
-                //     if (resp.status === 20000402) {
-                //         // 用户没登录，跳转至登录页面
-                //         this.$router.replace('/');
-                //     } else if (resp.status === 200) {
-                //         // that.dialogVisible = false;
-                //         // that.initDocuments();
-                //     }
-                // })
                 window.location.href="/document/basic/download/?token=" + window.localStorage.getItem('token') + "&fileName=" + data.fileName;
                 // window.opener("/document/basic/download/?fileName=" + data.fileName);
             }, 
@@ -308,8 +292,6 @@
                         if (valid) {
                             this.putRequest("/document/basic/", that.editDocument).then(resp => {
                                 if (resp.status === 20000402) {
-                                    // window.sessionStorage.removeItem('user'); 
-                                    // window.localStorage.removeItem('token');
                                     // 用户没登录，跳转至登录页面
                                     this.$router.replace('/');
                                 } else if (resp.status === 200) {

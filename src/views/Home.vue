@@ -68,7 +68,6 @@
                 return this.$store.state.routes;
             },
             user() {
-                // return this.$store.state.currentHr;
                 return JSON.parse(window.sessionStorage.getItem("user"));
             }
         },
@@ -83,13 +82,7 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        // let token = window.localStorage.getItem('token');
-                        // let url = '/user/logout?token=' + token;
                         this.getRequest('/user/logout');
-                        // 从session移除用户信息
-                        // window.sessionStorage.removeItem("user")
-                        // 从本地移除token
-                        // window.localStorage.removeItem('token');
                         this.$store.commit('initRoutes', []);
                         this.$router.replace("/");
                     }).catch(() => {

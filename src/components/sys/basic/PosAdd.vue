@@ -1,34 +1,43 @@
 <template>
-    <div>
-        <div>
-            <el-input
+    <!-- <div style="display: flex; justify-content: space-between; margin: 30px 10px;"> -->
+    <div style="display: flex; margin: 30px 10px;">
+        <div style="border: 2px solid skyblue; padding: 20px; width: 20%; min-width: 350px;">
+
+            <el-row style="margin-bottom: 20px;">
+                <el-input
+                    :disabled="!power"
                     size="small"
                     class="addPosInput"
                     v-loading="loading"
                     element-loading-text="正在加载..."
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(0, 0, 0, 0.8)"
-                    placeholder="添加职位..."
+                    placeholder="填写职位名称..."
                     prefix-icon="el-icon-plus"
                     @keydown.enter.native="addPosition"
                     v-model="pos.name">
-            </el-input>
-        </div>
-        <div>
-            <el-input
+                </el-input>
+            </el-row>
+            
+            <el-row style="margin-bottom: 20px;">
+                <el-input
+                    :disabled="!power"
                     size="small"
                     class="addPosInput"
                     v-loading="loading"
                     element-loading-text="正在加载..."
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(0, 0, 0, 0.8)"
-                    placeholder="添加职位..."
+                    placeholder="填写职位描述..."
                     prefix-icon="el-icon-plus"
                     @keydown.enter.native="addPosition"
-                    v-model="pos.remark">
-            </el-input>
+                    v-model="pos.remark"
+                    style="margin-right: 20px;">
+                </el-input>
+            </el-row>
+            <el-button style="float: right;" icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
         </div>
-        <el-button icon="el-icon-plus" size="small" type="primary" @click="addPosition">添加</el-button>
+
     </div>
 </template>
 
@@ -41,31 +50,26 @@
                     name: '', 
                     remark: ''
                 },
-                dialogVisible: false,
+                // 权限
+                power: JSON.parse(window.sessionStorage.getItem("user")).status == 1 ? false : true, 
                 loading: false,
-                updatePos: {
-                    name: '',
-                    enabled: false
-                },
-                multipleSelection: [],
-                positions: []
             }
         },
-        mounted() {
-            this.initPositions();
-        },
         methods: {
+            // 添加职位
             addPosition() {
-                if (this.pos.name) {
-                    this.postRequest("/system/basic/pos/", this.pos).then(resp => {
-                        if (resp) {
-                            this.initPositions();
-                            this.pos.name = '';
-                        }
-                    })
-                } else {
-                    this.$message.error('职位名称不可以为空');
+                if (this.pos.name == '' || this.pos.remark == '') {
+                    return this.$message.error('职位名称以及描述不可以为空！');
                 }
+                this.postRequest("/position/basic/", this.pos).then(resp => {
+                    if (resp.status === 20000402) {
+                        // 用户没登录，跳转至登录页面
+                        this.$router.replace('/');
+                    } else if (resp.status === 200) {
+                        this.pos.name = '';
+                        this.pos.remark = '';
+                    }
+                })
             }
         }
     }
@@ -74,15 +78,6 @@
 <style>
     .addPosInput {
         width: 300px;
-        margin-right: 8px
-    }
-
-    .updatePosInput {
-        width: 200px;
-        margin-left: 8px;
-    }
-
-    .posManaMain {
-        margin-top: 10px;
+        margin-right: 30px
     }
 </style>
