@@ -615,7 +615,7 @@
                 this.loading = true;
                 let url = '/user/basic/?page=' + this.page + '&size=' + this.size;
                 if (type && type == 'advanced') {
-                    if (this.searchValue.username) {
+                    if (this.searchValue.loginname) {
                          url += '&loginname=' + this.searchValue.loginname;
                     }
                     if (this.searchValue.status) {

@@ -44,9 +44,6 @@
                     <div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
                         欢迎来到人力资源管理系统！
                     </div>
-                    <div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
-                        项目开源地址：https://github.com/itqiangyu/xiaoyu-hrm
-                    </div>
                     <router-view class="homeRouterView"/>
                 </el-main>
             </el-container>
