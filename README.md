@@ -1,10 +1,10 @@
 # xiaoyu-hrm
 #### 人力资源管理系统
 #### 项目演示：[点击跳转](http://47.106.99.53:8082/)
-- ![hrm-登录页面](https://github.com/itqiangyu/xiaoyu-hrm/blob/master/images/hrm_index.png)
-- ![hrm-首页](https://github.com/itqiangyu/xiaoyu-hrm/blob/master/images/hrm_home.png)
-- ![hrm-管理用户模块](https://github.com/itqiangyu/xiaoyu-hrm/blob/master/images/hrm_userBasic.png)
-- ![hrm-添加用户模块](https://github.com/itqiangyu/xiaoyu-hrm/blob/master/images/hrm_userAdd.png)
+- ![hrm-登录页面](https://cdn.jsdelivr.net/gh/itqiangyu/xiaoyu-hrm/images/hrm_index.png)
+- ![hrm-首页](https://cdn.jsdelivr.net/gh/itqiangyu/xiaoyu-hrm/images/hrm_home.png)
+- ![hrm-管理用户模块](https://cdn.jsdelivr.net/gh/itqiangyu/xiaoyu-hrm/images/hrm_userBasic.png)
+- ![hrm-添加用户模块](https://cdn.jsdelivr.net/gh/itqiangyu/xiaoyu-hrm/images/hrm_userAdd.png)
 
 #### 项目技术栈
 
