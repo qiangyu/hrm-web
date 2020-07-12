@@ -79,6 +79,8 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
+                        // 移除用户信息
+                        window.sessionStorage.removeItem('user');
                         this.getRequest('/user/logout');
                         this.$store.commit('initRoutes', []);
                         this.$router.replace("/");

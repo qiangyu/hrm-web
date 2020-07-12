@@ -32,7 +32,7 @@ axios.interceptors.response.use(success => {
 let base = '';
 
 export const postKeyValueRequest = (url, params) => {
-    let token = window.localStorage.getItem('token');
+    // let token = window.localStorage.getItem('token');
     return axios({
         method: 'post',
         url: `${base}${url}`,
@@ -45,8 +45,8 @@ export const postKeyValueRequest = (url, params) => {
             return ret;
         }],
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded', 
-            'token': token
+            'Content-Type': 'application/x-www-form-urlencoded'
+            // 'token': token
         }
     });
 }
