@@ -40,7 +40,7 @@ router.beforeEach((to, from, next) => {
         // 移除职位
         // window.sessionStorage.removeItem('positions');
         // 移除政治面貌
-        // window.sessionStorage.removeItem('politicsstatus');
+        // window.sessionStorage.removeItem('politicsStatus');
         next();
     }else {
         if (window.localStorage.getItem('token') && window.sessionStorage.getItem('user')) {

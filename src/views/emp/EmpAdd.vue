@@ -34,7 +34,7 @@
                         <el-form-item label="政治面貌:" prop="party">
                             <el-select v-model="emp.party" placeholder="政治面貌" size="mini" style="width: 200px;">
                                 <el-option
-                                        v-for="item in politicsstatus"
+                                        v-for="item in politicsStatus"
                                         :key="item.id"
                                         :label="item.name"
                                         :value="item.name">
@@ -214,7 +214,7 @@
                 // 民族信息
                 nations: [],
                 // 政治面貌信息
-                politicsstatus: [],
+                politicsStatus: [],
                 // 职位信息
                 positions: [],
                 educations: [ '硕士', '博士', '本科', '大专', '高中', '初中', '小学', '其他'],
@@ -392,16 +392,16 @@
                     }
                 }
                 // 政治面貌
-                if (!window.sessionStorage.getItem("politicsstatus")) {
-                    this.getRequest('/employee/basic/politicsstatus').then(resp => {
+                if (!window.sessionStorage.getItem("politicsStatus")) {
+                    this.getRequest('/employee/basic/politicsStatus').then(resp => {
                         if (resp) {
-                            this.politicsstatus = resp.obj;
-                            window.sessionStorage.setItem("politicsstatus", JSON.stringify(resp.obj));
+                            this.politicsStatus = resp.obj;
+                            window.sessionStorage.setItem("politicsStatus", JSON.stringify(resp.obj));
                         }
                     })
                 } else {
-                    if (this.politicsstatus !== null) {
-                        this.politicsstatus = JSON.parse(window.sessionStorage.getItem("politicsstatus"));
+                    if (this.politicsStatus !== null) {
+                        this.politicsStatus = JSON.parse(window.sessionStorage.getItem("politicsStatus"));
                     }
                 }
                 // 部门
