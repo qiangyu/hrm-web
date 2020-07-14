@@ -7,7 +7,7 @@
                     <!-- <el-button icon="el-icon-bell" type="text" style="margin-right: 8px;color: #000000;" size="normal" @click="goChat"></el-button> -->
                     <el-dropdown class="userInfo" @command="commandHandler">
                         <span class="el-dropdown-link">
-                            {{user.loginname}}【{{user.status === 1 ? '普通用户' : user.status === 2 ? '管理员' : user.status === 3 ? '开发者' : '权限异常'}}】<i><img src="64573ce2edc0728.jpg" alt=""></i>
+                            {{user.loginname}}【{{user.status === 1 ? '普通用户' : user.status === 2 ? '管理员' : user.status === 3 ? '开发者' : '权限异常'}}】<i><img src="https://cdn.jsdelivr.net/gh/itqiangyu/blog/Pic/logo.jpg" alt=""></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>

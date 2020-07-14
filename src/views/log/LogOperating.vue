@@ -1,13 +1,13 @@
 <template>
     <div>
         <div>
-            <div style="display: flex;justify-content: space-between; min-width: 980px;">
+            <div style="display: flex;justify-content: space-between; min-width: 1050px;">
                 <div>
                     <el-input placeholder="请输入用户账号进行搜索，可以直接回车搜索..." 
                             prefix-icon="el-icon-search"
                             clearable
                             @clear="initLog"
-                            style="width: 340px; margin-right: 50px" 
+                            style="width: 340px; margin-right: 30px" 
                             v-model="searchValue.user"
                             @keydown.enter.native="initLog" 
                             :disabled="showAdvanceSearchView"></el-input>
@@ -15,7 +15,7 @@
                     时间筛选:
                     <el-date-picker
                         v-model="searchValue.screenDate"
-                        style="margin-right: 50px" 
+                        style="margin-right: 30px" 
                         type="daterange"
                         align="right"
                         unlink-panels
@@ -26,13 +26,14 @@
                         end-placeholder="结束日期"
                         :picker-options="pickerOptions">
                     </el-date-picker>
-                    <el-button icon="el-icon-search" type="primary" @click="initLog" :disabled="showAdvanceSearchView">
+                    <el-button icon="el-icon-search" style="margin-right: 20px" type="primary" @click="initLog" :disabled="showAdvanceSearchView">
                         搜索
                     </el-button>
+                    <a href="http://json.cn/#" target="_blank">JSON解析</a>
                 </div>
             </div>
         </div>
-        <div style="margin-top: 10px; min-width: 980px;">
+        <div style="margin-top: 10px; min-width: 1050px;">
             <el-table
                     :data="logs"
                     stripe
@@ -84,7 +85,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div style="display: flex;justify-content: flex-end; min-width: 750px;">
+        <div style="display: flex;justify-content: flex-end; min-width: 1050px;">
             <el-pagination
                     background
                     @current-change="currentChange"
