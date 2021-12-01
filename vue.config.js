@@ -14,8 +14,8 @@ proxyObj['/'] = {
 }
 
 module.exports = {
-    publicPath: '', 
-    outputDir: 'dist', 
+    publicPath: '/', 
+    outputDir: 'static', 
     assetsDir: 'static', 
     lintOnSave: process.env.NODE_ENV==='development', 
     devServer: {
