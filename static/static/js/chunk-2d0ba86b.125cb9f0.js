@@ -1,2 +1,2 @@
 (window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0ba86b"],{"381a":function(n,e,r){var o={"./UserAdd.vue":"95c0","./UserBasic.vue":"f22d"};function u(n){var e=c(n);return r(e)}function c(n){if(!r.o(o,n)){var e=new Error("Cannot find module '"+n+"'");throw e.code="MODULE_NOT_FOUND",e}return o[n]}u.keys=function(){return Object.keys(o)},u.resolve=c,n.exports=u,u.id="381a"}}]);
-//# sourceMappingURL=chunk-2d0ba86b.85bdcf63.js.map
+//# sourceMappingURL=chunk-2d0ba86b.125cb9f0.js.map

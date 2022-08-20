@@ -11,7 +11,7 @@
                             :on-success="onSuccess"
                             :data="user"
                             action="/user/userface"> -->
-                        <img title="点击修改用户图像" src="64573ce2edc0728.jpg" style="width: 100px;height: 100px;border-radius: 50px"
+                        <img title="不支持修改用户图像" src="http://47.96.164.65/blog/pictures/logo.jpg" style="width: 100px;height: 100px;border-radius: 50px"
                              alt="">
                     <!-- </el-upload> -->
                 </div>
